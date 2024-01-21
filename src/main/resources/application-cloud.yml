@@ -4,9 +4,9 @@ spring:
       "sm://"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${sm://projects/1009152157741/secrets/TEST_DB_HOST}
-    username: ${sm://projects/1009152157741/secrets/TEST_DB_PASSWORD}
-    password: ${sm://projects/1009152157741/secrets/TEST_DB_USER}
+    url: ${sm://TEST_DB_HOST}
+    username: ${sm://TEST_DB_PASSWORD}
+    password: ${sm://TEST_DB_USER}
   jpa:
     show-sql: true
     hibernate:
