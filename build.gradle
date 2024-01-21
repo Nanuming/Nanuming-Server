@@ -31,8 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    implementation platform('com.google.cloud:spring-cloud-gcp-dependencies:4.5.1')
-    implementation 'com.google.cloud:spring-cloud-gcp-starter-secretmanager'
+    implementation 'com.google.cloud:spring-cloud-gcp-starter-secretmanager:4.5.1'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
