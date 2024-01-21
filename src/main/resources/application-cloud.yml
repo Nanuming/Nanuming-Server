@@ -5,8 +5,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${sm://TEST_DB_HOST}
-    username: ${sm://TEST_DB_PASSWORD}
-    password: ${sm://TEST_DB_USER}
+    username: ${sm://TEST_DB_USER}
+    password: ${sm://TEST_DB_PASSWORD}
   jpa:
     show-sql: true
     hibernate:
