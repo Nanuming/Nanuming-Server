@@ -31,12 +31,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    implementation 'com.google.cloud:spring-cloud-gcp-starter-secretmanager:4.5.1'
+    implementation 'com.google.cloud:spring-cloud-gcp-starter-secretmanager'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:4.1.4"
+    }
 }
 
 tasks.named('test') {
