@@ -1,11 +1,8 @@
 package gdsc.nanuming.member.entity;
 
-import java.time.LocalDateTime;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import gdsc.nanuming.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -20,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Member {
+public class Member extends BaseEntity {
 
 	@Id
 	@Column(name = "member_id")
@@ -30,13 +27,6 @@ public class Member {
 	private String googleId;
 
 	private String name;
-
-	@CreatedDate
-	@Column(updatable = false)
-	private LocalDateTime registrationDate;
-
-	@LastModifiedDate
-	private LocalDateTime updateDate;
 
 	private String profileUrl;
 }
