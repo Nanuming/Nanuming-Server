@@ -14,4 +14,7 @@ public class ResponseDto<T> {
 		this.message = code.getMessage();
 	}
 
+	public static <T> ResponseDto<T> from(Code code) {
+		return new ResponseDto<>(code);
+	}
 }
