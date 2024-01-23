@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class ResponseDto<T> {
 
-	private final boolean success;
-	private final int status;
-	private final String message;
+	private boolean success;
+	private int status;
+	private String message;
 
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private final T data;
