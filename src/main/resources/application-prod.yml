@@ -1,0 +1,9 @@
+spring:
+  config:
+    import:
+      "sm://"
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${sm://DB_HOST}
+    username: ${sm://DB_USER}
+    password: ${sm://DB_PASSWORD}
