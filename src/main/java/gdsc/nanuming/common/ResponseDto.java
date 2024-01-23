@@ -1,8 +1,10 @@
 package gdsc.nanuming.common;
 
 import gdsc.nanuming.common.code.Code;
+import lombok.Getter;
 
 public class ResponseDto<T> {
+@Getter
 
 	private final boolean success;
 	private final int status;
