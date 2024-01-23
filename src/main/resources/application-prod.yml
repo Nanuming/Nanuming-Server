@@ -7,3 +7,7 @@ spring:
     url: ${sm://DB_HOST}
     username: ${sm://DB_USER}
     password: ${sm://DB_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
