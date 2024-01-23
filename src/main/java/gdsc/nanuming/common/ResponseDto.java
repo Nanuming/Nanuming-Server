@@ -4,9 +4,9 @@ import gdsc.nanuming.common.code.Code;
 
 public class ResponseDto<T> {
 
-	private boolean success;
-	private int status;
-	private String message;
+	private final boolean success;
+	private final int status;
+	private final String message;
 
 	private ResponseDto(Code code) {
 		this.success = code.isSuccess();
