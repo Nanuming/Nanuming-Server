@@ -1,6 +1,6 @@
 package gdsc.nanuming.common;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import gdsc.nanuming.common.code.Code;
 
 public class ResponseDto<T> {
 
@@ -8,7 +8,10 @@ public class ResponseDto<T> {
 	private int status;
 	private String message;
 
-	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	private final T data;
+	private ResponseDto(Code code) {
+		this.success = code.isSuccess();
+		this.status = code.getStatus();
+		this.message = code.getMessage();
+	}
 
 }
