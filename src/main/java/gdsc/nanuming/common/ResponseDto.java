@@ -3,8 +3,8 @@ package gdsc.nanuming.common;
 import gdsc.nanuming.common.code.Code;
 import lombok.Getter;
 
-public class ResponseDto<T> {
 @Getter
+public class ResponseDto {
 
 	private final boolean success;
 	private final int status;
@@ -16,7 +16,7 @@ public class ResponseDto<T> {
 		this.message = code.getMessage();
 	}
 
-	public static <T> ResponseDto<T> from(Code code) {
-		return new ResponseDto<>(code);
+	public static ResponseDto from(Code code) {
+		return new ResponseDto(code);
 	}
 }
