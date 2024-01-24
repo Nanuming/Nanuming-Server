@@ -18,4 +18,8 @@ public class ResponseWithDataDto<T> {
 		this.data = data;
 	}
 
+	public static <T> ResponseWithDataDto<T> of(Code code, T data) {
+		return new ResponseWithDataDto<>(code, data);
+	}
+
 }
