@@ -12,13 +12,3 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${sm://IOS_CLIENT_ID}
-            scope:
-              - openid
-              - profile
-              - email
