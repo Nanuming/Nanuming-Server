@@ -1,4 +1,4 @@
-package gdsc.nanuming.common;
+package gdsc.nanuming.common.response;
 
 import gdsc.nanuming.common.code.Code;
 import lombok.Getter;
