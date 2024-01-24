@@ -1,5 +1,8 @@
 package gdsc.nanuming.common;
 
+import lombok.Getter;
+
+@Getter
 public class ResponseWithDataDto<T> {
 
 	private final boolean success;
