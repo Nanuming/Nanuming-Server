@@ -5,12 +5,11 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.google.api.client.util.Value;
-
-import gdsc.nanuming.security.jwt.dto.GeneratedToken;
 import gdsc.nanuming.member.MemberRole;
+import gdsc.nanuming.security.jwt.dto.GeneratedToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -23,14 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtUtil {
 
-	@Value("${sm://JWT_SECRET}")
-	private String secret;
+	@Value("sm://JWT_ACCESS_TOKEN_PERIOD")
+	private String accessTokenPeriod;
 
-	@Value("${sm://JWT_ACCESS_TOKEN_PERIOD}")
-	private Long accessTokenPeriod;
-
-	@Value("${sm://JWT_REFRESH_TOKEN_PERIOD}")
-	private long refreshTokenPeriod;
+	@Value("sm://JWT_REFRESH_TOKEN_PERIOD")
+	private String refreshTokenPeriod;
 
 	private SecretKey secretKey;
 
