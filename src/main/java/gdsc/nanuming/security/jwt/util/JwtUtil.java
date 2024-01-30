@@ -13,6 +13,7 @@ import gdsc.nanuming.security.jwt.dto.GeneratedToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +33,7 @@ public class JwtUtil {
 
 	@PostConstruct
 	protected void init() {
-		log.info(">>> JwtUtil secret: {}", secret);
-		secretKey = Keys.hmacShaKeyFor(secret.getBytes());
-		log.info(">>> JwtUtil secretKey: {}", secretKey);
+		secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 	}
 
 	public GeneratedToken generateToken(String email, MemberRole role) {
