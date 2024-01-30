@@ -40,6 +40,13 @@ public class SecurityConfiguration {
 		// Session Management Policy - STATELESS
 		http.sessionManagement(
 			sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+		http.authorizeHttpRequests(authorizeRequests ->
+			authorizeRequests
+				.requestMatchers("/", "/oauth2/**").permitAll()
+				// .requestMatchers("/api/**").hasRole())
+				// TODO: after adding `MemberRole`
+				.anyRequest().authenticated());
 	}
 
 }
