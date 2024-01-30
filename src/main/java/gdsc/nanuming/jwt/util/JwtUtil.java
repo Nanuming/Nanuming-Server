@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtUtil {
 
+	private String secret;
+	private String secretKey;
+
 
 
 }
