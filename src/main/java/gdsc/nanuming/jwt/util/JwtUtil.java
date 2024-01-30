@@ -11,6 +11,9 @@ import com.google.api.client.util.Value;
 
 import gdsc.nanuming.jwt.dto.GeneratedToken;
 import gdsc.nanuming.member.MemberRole;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +36,8 @@ public class JwtUtil {
 
 	@PostConstruct
 	protected void init() {
-		secretKey = Base64.getEncoder().encodeToString(secret.getBytes());
 		log.info(">>> JwtUtil secret: {}", secret);
+		secretKey = Keys.hmacShaKeyFor(secret.getBytes());
 		log.info(">>> JwtUtil secretKey: {}", secretKey);
 	}
 
