@@ -21,6 +21,7 @@ public class OidcAttributes {
 	private static final String UUID = "providerId";
 	private static final String EMAIL = "email";
 	private static final String PROVIDER = "provider";
+	private static final String UNDERSCORE = "_";
 
 	@Builder
 	private OidcAttributes(Map<String, Object> attributes, String attributeKey, String providerId, String email,
@@ -45,7 +46,7 @@ public class OidcAttributes {
 	private static OidcAttributes ofGoogle(String provider, String attributeKey, Map<String, Object> attributes) {
 
 		// create UUID
-		String providerId = provider + attributes.get(attributeKey);
+		String providerId = provider + UNDERSCORE + attributes.get(attributeKey);
 
 		return OidcAttributes.builder()
 			.providerId(providerId)
