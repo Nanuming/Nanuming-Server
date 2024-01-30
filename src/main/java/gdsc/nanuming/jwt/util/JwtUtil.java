@@ -1,5 +1,9 @@
 package gdsc.nanuming.jwt.util;
 
+import java.util.Base64;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.stereotype.Service;
 
 import com.google.api.client.util.Value;
@@ -16,6 +20,12 @@ public class JwtUtil {
 	private String secret;
 	private String secretKey;
 
+	@PostConstruct
+	protected void init() {
+		secretKey = Base64.getEncoder().encodeToString(secret.getBytes());
+		log.info(">>> JwtUtil secret: {}", secret);
+		log.info(">>> JwtUtil secretKey: {}", secretKey);
+	}
 
 
 }
