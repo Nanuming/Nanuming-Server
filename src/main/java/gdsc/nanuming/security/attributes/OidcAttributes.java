@@ -30,4 +30,18 @@ public class OidcAttributes {
 		this.email = email;
 		this.provider = provider;
 	}
+
+	private static OidcAttributes ofGoogle(String provider, String attributeKey, Map<String, Object> attributes) {
+
+		// create UUID
+		String providerId = provider + attributes.get(attributeKey);
+
+		return OidcAttributes.builder()
+			.providerId(providerId)
+			.email((String)attributes.get(EMAIL))
+			.provider(provider)
+			.attributes(attributes)
+			.attributeKey(attributeKey)
+			.build();
+	}
 }
