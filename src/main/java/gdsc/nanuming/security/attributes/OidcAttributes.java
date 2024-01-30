@@ -2,6 +2,7 @@ package gdsc.nanuming.security.attributes;
 
 import java.util.Map;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -20,4 +21,13 @@ public class OidcAttributes {
 	private static final String EMAIL = "email";
 	private static final String PROVIDER = "provider";
 
+	@Builder
+	private OidcAttributes(Map<String, Object> attributes, String attributeKey, String providerId, String email,
+		String provider) {
+		this.attributes = attributes;
+		this.attributeKey = attributeKey;
+		this.providerId = providerId;
+		this.email = email;
+		this.provider = provider;
+	}
 }
