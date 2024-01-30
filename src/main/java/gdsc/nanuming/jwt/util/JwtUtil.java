@@ -75,4 +75,17 @@ public class JwtUtil {
 				.compact();
 	}
 
+	public boolean verifyToken(String token) {
+		try {
+			Jws<Claims> claims = Jwts.parserBuilder()
+				.setSigningKey(secretKey)
+				.build().parseClaimsJws(token);
+
+			return claims.getBody()
+				.getExpiration()
+				.after(new Date());
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }
