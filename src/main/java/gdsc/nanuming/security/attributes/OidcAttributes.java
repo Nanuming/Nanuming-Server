@@ -1,5 +1,6 @@
 package gdsc.nanuming.security.attributes;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import lombok.Builder;
@@ -53,5 +54,14 @@ public class OidcAttributes {
 			.attributes(attributes)
 			.attributeKey(attributeKey)
 			.build();
+	}
+
+	// return values as Map to put into OidcUser
+	public Map<String, Object> convertToMap() {
+		Map<String, Object> map = new HashMap<>();
+		map.put(UUID, providerId);
+		map.put(EMAIL, email);
+
+		return map;
 	}
 }
