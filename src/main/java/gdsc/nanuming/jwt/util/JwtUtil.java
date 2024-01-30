@@ -43,6 +43,11 @@ public class JwtUtil {
 
 	public GeneratedToken generateToken(String email, MemberRole role) {
 
+		String accessToken = generateAccessToken(email, role);
+		String refreshToken = generateRefreshToken(email, role);
+
+		return new GeneratedToken();
+		// TODO: need additional work here
 	}
 
 	private String generateAccessToken(String email, MemberRole role) {
