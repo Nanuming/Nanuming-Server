@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.google.api.client.util.Value;
 
+import gdsc.nanuming.jwt.dto.GeneratedToken;
+import gdsc.nanuming.member.MemberRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +28,11 @@ public class JwtUtil {
 		log.info(">>> JwtUtil secret: {}", secret);
 		log.info(">>> JwtUtil secretKey: {}", secretKey);
 	}
+
+	public GeneratedToken generateToken(String email, MemberRole role) {
+
+	}
+
 
 
 }
