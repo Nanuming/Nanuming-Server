@@ -1,6 +1,6 @@
 package gdsc.nanuming.jwt.util;
 
-import java.util.Base64;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
@@ -45,6 +45,19 @@ public class JwtUtil {
 
 	}
 
+	private String generateAccessToken(String email, MemberRole role) {
+		Claims claims = Jwts.claims().setSubject(email);
+		claims.put("role", role.getValue());
 
+		Date now = new Date();
+
+		return
+			Jwts.builder()
+				.setClaims(claims)
+				.setIssuedAt(now)
+				.setExpiration(new Date(now.getTime() + accessTokenPeriod))
+				.signWith(secretKey)
+				.compact();
+	}
 
 }
