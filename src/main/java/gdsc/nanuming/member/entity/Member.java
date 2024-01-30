@@ -3,9 +3,12 @@ package gdsc.nanuming.member.entity;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import gdsc.nanuming.common.BaseEntity;
+import gdsc.nanuming.member.MemberRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,9 +27,18 @@ public class Member extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String googleId;
+	@Column(unique = true)
+	private String email;
 
-	private String name;
+	private String nickname;
+
+	@Column(unique = true)
+	private String providerId;
+
+	private String picture;
+
+	@Enumerated(EnumType.STRING)
+	private MemberRole role;
 
 	private String profileUrl;
 }
