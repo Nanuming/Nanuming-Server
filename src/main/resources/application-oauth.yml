@@ -8,3 +8,5 @@ spring:
             #            redirect-uri: # 추후 작성
             scope:
               - openid
+              - email
+              - profile
