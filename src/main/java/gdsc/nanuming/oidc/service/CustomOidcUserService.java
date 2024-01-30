@@ -1,4 +1,4 @@
-package gdsc.nanuming.oauth.service;
+package gdsc.nanuming.oidc.service;
 
 public class CustomOidcUserService {
 }
