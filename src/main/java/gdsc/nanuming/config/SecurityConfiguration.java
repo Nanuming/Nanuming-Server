@@ -29,6 +29,10 @@ public class SecurityConfiguration {
 
 		// disable CSRF
 		http.csrf(AbstractHttpConfigurer::disable);
+
+		// disable HTTP Basic
+		http.httpBasic(AbstractHttpConfigurer::disable);
+
 	}
 
 }
