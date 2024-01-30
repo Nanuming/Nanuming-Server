@@ -41,4 +41,11 @@ public class Member extends BaseEntity {
 	private MemberRole role;
 
 	private String profileUrl;
+	private Member(String email, String providerId, String picture, MemberRole role) {
+		this.email = email;
+		this.providerId = providerId;
+		this.picture = picture;
+		this.role = role;
+	}
+
 }
