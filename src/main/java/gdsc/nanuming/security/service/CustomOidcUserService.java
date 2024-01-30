@@ -11,4 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CustomOidcUserService extends OidcUserService {
 
+	private static final String EMAIL = "email";
+	private static final String REGISTERED = "registered";
 }
