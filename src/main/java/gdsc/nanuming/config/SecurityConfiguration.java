@@ -33,6 +33,8 @@ public class SecurityConfiguration {
 		// disable HTTP Basic
 		http.httpBasic(AbstractHttpConfigurer::disable);
 
+		// disable Form Login
+		http.formLogin(AbstractHttpConfigurer::disable);
 	}
 
 }
