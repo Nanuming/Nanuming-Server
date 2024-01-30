@@ -9,6 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
+import gdsc.nanuming.security.service.CustomOidcUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
+
+	private final CustomOidcUserService customOidcUserService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,7 +51,9 @@ public class SecurityConfiguration {
 				// TODO: after adding `MemberRole`
 				.anyRequest().authenticated());
 
-		// TODO: after adding OIDC processes
+		http.oauth2Login(
+			oauth2Login -> oauth2Login.userInfoEndpoint(
+				userinfoEndPoint -> userinfoEndPoint.oidcUserService(customOidcUserService)));
 
 		// TODO: add filter
 		return http.build();
