@@ -1,4 +1,4 @@
-package gdsc.nanuming.jwt.util;
+package gdsc.nanuming.security.jwt.util;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.api.client.util.Value;
 
-import gdsc.nanuming.jwt.dto.GeneratedToken;
+import gdsc.nanuming.security.jwt.dto.GeneratedToken;
 import gdsc.nanuming.member.MemberRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
