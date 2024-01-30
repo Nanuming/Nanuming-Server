@@ -60,4 +60,19 @@ public class JwtUtil {
 				.compact();
 	}
 
+	private String generateRefreshToken(String email, MemberRole role) {
+		Claims claims = Jwts.claims().setSubject(email);
+		claims.put("role", role.getValue());
+
+		Date now = new Date();
+
+		return
+			Jwts.builder()
+				.setClaims(claims)
+				.setIssuedAt(now)
+				.setExpiration(new Date(now.getTime() + refreshTokenPeriod))
+				.signWith(secretKey)
+				.compact();
+	}
+
 }
