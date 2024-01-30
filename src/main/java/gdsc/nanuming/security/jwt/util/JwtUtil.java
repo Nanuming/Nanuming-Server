@@ -55,7 +55,7 @@ public class JwtUtil {
 			Jwts.builder()
 				.setClaims(claims)
 				.setIssuedAt(now)
-				.setExpiration(new Date(now.getTime() + accessTokenPeriod))
+				.setExpiration(new Date(now.getTime() + Long.parseLong(accessTokenPeriod)))
 				.signWith(secretKey)
 				.compact();
 	}
@@ -70,7 +70,7 @@ public class JwtUtil {
 			Jwts.builder()
 				.setClaims(claims)
 				.setIssuedAt(now)
-				.setExpiration(new Date(now.getTime() + refreshTokenPeriod))
+				.setExpiration(new Date(now.getTime() + Long.parseLong(refreshTokenPeriod)))
 				.signWith(secretKey)
 				.compact();
 	}
