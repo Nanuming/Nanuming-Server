@@ -47,6 +47,11 @@ public class SecurityConfiguration {
 				// .requestMatchers("/api/**").hasRole())
 				// TODO: after adding `MemberRole`
 				.anyRequest().authenticated());
+
+		// TODO: after adding OIDC processes
+
+		// TODO: add filter
+		return http.build();
 	}
 
 }
