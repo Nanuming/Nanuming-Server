@@ -31,6 +31,16 @@ public class OidcAttributes {
 		this.provider = provider;
 	}
 
+	public static OidcAttributes of(String provider, String attributeKey, Map<String, Object> attributes) {
+		switch (provider) {
+			case GOOGLE:
+				return ofGoogle(provider, attributeKey, attributes);
+			default:
+				throw new RuntimeException();
+				// TODO: create custom exception here
+		}
+	}
+
 	private static OidcAttributes ofGoogle(String provider, String attributeKey, Map<String, Object> attributes) {
 
 		// create UUID
