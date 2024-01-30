@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -21,7 +22,7 @@ public class SecurityConfiguration {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		// activate CORS
-		http.cors(cors->cors.configurationSource(request -> {
+		http.cors(cors -> cors.configurationSource(request -> {
 			CorsConfiguration configuration = new CorsConfiguration();
 			configuration.applyPermitDefaultValues();
 			return configuration;
@@ -35,6 +36,10 @@ public class SecurityConfiguration {
 
 		// disable Form Login
 		http.formLogin(AbstractHttpConfigurer::disable);
+
+		// Session Management Policy - STATELESS
+		http.sessionManagement(
+			sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 	}
 
 }
