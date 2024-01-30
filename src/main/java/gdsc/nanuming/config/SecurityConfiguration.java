@@ -54,8 +54,9 @@ public class SecurityConfiguration {
 				.anyRequest().authenticated());
 
 		http.oauth2Login(
-			oauth2Login -> oauth2Login.userInfoEndpoint(
-				userinfoEndPoint -> userinfoEndPoint.oidcUserService(customOidcUserService)));
+			oauth2Login -> oauth2Login
+				.userInfoEndpoint(userinfoEndPoint -> userinfoEndPoint.oidcUserService(customOidcUserService))
+				.successHandler(customAuthenticationSuccessHandler));
 
 		// TODO: add filter
 		return http.build();
