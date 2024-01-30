@@ -1,4 +1,4 @@
-package gdsc.nanuming.oidc.service;
+package gdsc.nanuming.security.service;
 
 import org.springframework.stereotype.Service;
 
