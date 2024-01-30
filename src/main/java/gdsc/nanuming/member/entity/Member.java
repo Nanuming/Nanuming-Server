@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,7 +41,7 @@ public class Member extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private MemberRole role;
 
-	private String profileUrl;
+	@Builder
 	private Member(String email, String providerId, String picture, MemberRole role) {
 		this.email = email;
 		this.providerId = providerId;
