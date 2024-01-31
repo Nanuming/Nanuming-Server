@@ -67,7 +67,7 @@ public class CustomOidcUserService extends OidcUserService {
 		memberAttribute.put(REGISTERED, true);
 		OidcUserInfo userInfo = new OidcUserInfo(memberAttribute);
 		return new DefaultOidcUser(
-			Collections.singleton(new SimpleGrantedAuthority(MemberRole.GUEST.getValue())),
+			Collections.singleton(new SimpleGrantedAuthority(MemberRole.USER.getValue())),
 			oidcUser.getIdToken(), userInfo
 		);
 	}
