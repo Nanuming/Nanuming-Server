@@ -8,7 +8,6 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import gdsc.nanuming.member.MemberRole;
 import gdsc.nanuming.security.jwt.dto.GeneratedToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -36,7 +35,7 @@ public class JwtUtil {
 		secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 	}
 
-	public GeneratedToken generateToken(String email, MemberRole role) {
+	public GeneratedToken generateToken(String email, String role) {
 
 		String accessToken = generateAccessToken(email, role);
 		String refreshToken = generateRefreshToken(email, role);
@@ -45,9 +44,9 @@ public class JwtUtil {
 		// TODO: need additional work here
 	}
 
-	private String generateAccessToken(String email, MemberRole role) {
+	private String generateAccessToken(String email, String role) {
 		Claims claims = Jwts.claims().setSubject(email);
-		claims.put("role", role.getValue());
+		claims.put("role", role);
 
 		Date now = new Date();
 
@@ -60,9 +59,9 @@ public class JwtUtil {
 				.compact();
 	}
 
-	private String generateRefreshToken(String email, MemberRole role) {
+	private String generateRefreshToken(String email, String role) {
 		Claims claims = Jwts.claims().setSubject(email);
-		claims.put("role", role.getValue());
+		claims.put("role", role);
 
 		Date now = new Date();
 
