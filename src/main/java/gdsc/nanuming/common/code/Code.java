@@ -6,8 +6,6 @@ public interface Code {
 
 	int getStatus();
 
-	int getCode();
-
 	String getMessage();
 
 }
