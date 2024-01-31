@@ -1,5 +1,5 @@
 package gdsc.nanuming.common.code;
 
-public enum CommonSuccessCode {
+public enum CommonSuccessCode implements Code {
 
 }
