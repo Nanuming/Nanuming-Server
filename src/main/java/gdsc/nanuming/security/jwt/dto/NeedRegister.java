@@ -11,4 +11,8 @@ public class NeedRegister {
 		this.needRegister = needRegister;
 	}
 
+	public static NeedRegister from(boolean needRegister) {
+		return new NeedRegister(needRegister);
+	}
+
 }
