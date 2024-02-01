@@ -1,6 +1,7 @@
 package gdsc.nanuming.member.entity;
 
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import gdsc.nanuming.common.BaseEntity;
 import gdsc.nanuming.member.MemberRole;
@@ -37,7 +38,7 @@ public class Member extends BaseEntity {
 
 	private String picture;
 
-	@Enumerated(EnumType.STRING)
+	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private MemberRole role;
 
 	@Builder
