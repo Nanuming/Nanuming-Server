@@ -5,4 +5,6 @@ import lombok.Getter;
 @Getter
 public class NeedRegister {
 
+	private final boolean needRegister;
+
 }
