@@ -7,4 +7,8 @@ public class NeedRegister {
 
 	private final boolean needRegister;
 
+	private NeedRegister(boolean needRegister) {
+		this.needRegister = needRegister;
+	}
+
 }
