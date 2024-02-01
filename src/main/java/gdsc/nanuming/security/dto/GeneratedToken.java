@@ -1,4 +1,4 @@
-package gdsc.nanuming.security.jwt.dto;
+package gdsc.nanuming.security.dto;
 
 import lombok.Getter;
 
