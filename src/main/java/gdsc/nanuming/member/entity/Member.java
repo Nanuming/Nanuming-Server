@@ -42,19 +42,21 @@ public class Member extends BaseEntity {
 	private MemberRole role;
 
 	@Builder
-	private Member(String email, String providerId, String picture, MemberRole role) {
+	private Member(String email, String nickname, String providerId, String picture, MemberRole role) {
 		this.email = email;
+		this.nickname = nickname;
 		this.providerId = providerId;
 		this.picture = picture;
 		this.role = role;
 	}
 
-	public static Member of(String email, String providerId, String picture) {
+	public static Member of(String email, String nickname, String providerId, String picture) {
 		return Member.builder()
 			.email(email)
+			.nickname(nickname)
 			.providerId(providerId)
 			.picture(picture)
-			.role(MemberRole.GUEST)
+			.role(MemberRole.USER)
 			.build();
 	}
 }
