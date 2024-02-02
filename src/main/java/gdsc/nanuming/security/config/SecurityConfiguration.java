@@ -1,4 +1,4 @@
-package gdsc.nanuming.config;
+package gdsc.nanuming.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,8 +9,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
-import gdsc.nanuming.security.handler.CustomAuthenticationSuccessHandler;
-import gdsc.nanuming.security.service.CustomOidcUserService;
+import gdsc.nanuming.member.MemberRole;
+// import gdsc.nanuming.security.handler.CustomAuthenticationSuccessHandler;
+// import gdsc.nanuming.security.service.CustomOidcUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-	private final CustomOidcUserService customOidcUserService;
-	private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	// private final CustomOidcUserService customOidcUserService;
+	// private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,20 +44,20 @@ public class SecurityConfiguration {
 		http.formLogin(AbstractHttpConfigurer::disable);
 
 		// Session Management Policy - STATELESS
-		http.sessionManagement(
-			sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		// http.sessionManagement(
+		// 	sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		http.authorizeHttpRequests(authorizeRequests ->
 			authorizeRequests
-				.requestMatchers("/", "/oauth2/**").permitAll()
-				// .requestMatchers("/api/**").hasRole())
-				// TODO: after adding `MemberRole`
+				// .requestMatchers("/", "/oauth2/**").permitAll()
+				.requestMatchers("/api/member/register").hasAuthority(MemberRole.GUEST.getValue())
+				.requestMatchers("/api/member/hi").hasAuthority(MemberRole.GUEST.getValue())
 				.anyRequest().authenticated());
 
-		http.oauth2Login(
-			oauth2Login -> oauth2Login
-				.userInfoEndpoint(userinfoEndPoint -> userinfoEndPoint.oidcUserService(customOidcUserService))
-				.successHandler(customAuthenticationSuccessHandler));
+		// http.oauth2Login(
+		// 	oauth2Login -> oauth2Login
+		// 		.userInfoEndpoint(userinfoEndPoint -> userinfoEndPoint.oidcUserService(customOidcUserService))
+		// 		.successHandler(customAuthenticationSuccessHandler));
 
 		// TODO: add filter
 		return http.build();
