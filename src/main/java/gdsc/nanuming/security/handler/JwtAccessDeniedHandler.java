@@ -19,5 +19,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
 		// TODO: create custom ErrorResponse here
 		// when attempting to access without necessary permissions -> return 403
+		response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	}
 }
