@@ -18,7 +18,7 @@ public class RefreshToken {
 	@TimeToLive
 	private Long tokenPeriod;
 
-	public RefreshToken(final String refreshToken, final Long memberId, final Long tokenPeriod) {
+	private RefreshToken(final String refreshToken, final String providerId, final Long tokenPeriod) {
 		this.refreshToken = refreshToken;
 		this.memberId = memberId;
 		this.tokenPeriod = tokenPeriod;
