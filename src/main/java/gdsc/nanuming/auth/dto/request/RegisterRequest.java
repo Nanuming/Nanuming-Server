@@ -1,5 +1,7 @@
 package gdsc.nanuming.auth.dto.request;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import gdsc.nanuming.member.entity.Member;
 import lombok.Getter;
 
@@ -19,5 +21,9 @@ public class RegisterRequest {
 			this.providerId,
 			this.picture
 		);
+	}
+
+	public UsernamePasswordAuthenticationToken toAuthentication() {
+		return new UsernamePasswordAuthenticationToken(this.providerId, null);
 	}
 }
