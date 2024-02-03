@@ -25,4 +25,12 @@ public class RefreshToken {
 		this.providerId = providerId;
 		this.tokenPeriod = tokenPeriod;
 	}
+
+	public static RefreshToken of(String refreshToken, String providerId, Long tokenPeriod) {
+		return RefreshToken.builder()
+			.refreshToken(refreshToken)
+			.providerId(providerId)
+			.tokenPeriod(tokenPeriod)
+			.build();
+	}
 }
