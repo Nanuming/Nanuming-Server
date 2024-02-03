@@ -1,4 +1,4 @@
-package gdsc.nanuming.auth.dto;
+package gdsc.nanuming.auth.dto.request;
 
 import gdsc.nanuming.member.entity.Member;
 import lombok.Getter;
