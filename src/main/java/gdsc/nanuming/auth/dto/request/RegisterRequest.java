@@ -12,7 +12,7 @@ public class RegisterRequest {
 	private String providerId;
 	private String picture;
 
-	public Member toEntity() {
+	public Member toMember() {
 		return Member.of(
 			this.email,
 			this.nickname,
