@@ -14,7 +14,7 @@ public class RefreshToken {
 	@Id
 	private String refreshToken;
 
-	private Long memberId;
+	private String providerId;
 
 	@TimeToLive
 	private Long tokenPeriod;
@@ -22,7 +22,7 @@ public class RefreshToken {
 	@Builder
 	private RefreshToken(final String refreshToken, final String providerId, final Long tokenPeriod) {
 		this.refreshToken = refreshToken;
-		this.memberId = memberId;
+		this.providerId = providerId;
 		this.tokenPeriod = tokenPeriod;
 	}
 }
