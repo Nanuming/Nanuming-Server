@@ -1,4 +1,8 @@
 package gdsc.nanuming.jwt.repository;
 
-public class RefreshTokenRepository {
+import org.springframework.data.repository.CrudRepository;
+
+import gdsc.nanuming.jwt.entity.RefreshToken;
+
+public interface RefreshTokenRepository extends CrudRepository<RefreshToken, String> {
 }
