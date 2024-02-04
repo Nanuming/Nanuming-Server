@@ -6,7 +6,7 @@ import gdsc.nanuming.member.entity.Member;
 import lombok.Getter;
 
 @Getter
-public class RegisterRequest {
+public class RegisterRequest implements AuthenticationConvertible {
 
 	private String email;
 	private String nickname;
@@ -23,6 +23,7 @@ public class RegisterRequest {
 		);
 	}
 
+	@Override
 	public UsernamePasswordAuthenticationToken toAuthentication() {
 		return new UsernamePasswordAuthenticationToken(this.providerId, null);
 	}
