@@ -35,24 +35,18 @@ public class AuthService {
 
 	@Transactional
 	public RegisterResponse register(RegisterRequest registerRequest) {
-		log.info(">>> AuthService register()");
+
 		String providerId = registerRequest.getProviderId();
-		log.info(">>> AuthService register() providerId: {}", providerId);
+
 		if (memberRepository.existsByProviderId(providerId)) {
 			// TODO: create ErrorResponse here
 			throw new RuntimeException("이미 가입되어 있는 유저입니다.");
 		}
 		Member member = memberRepository.save(registerRequest.toMember());
 
-		log.info(">>> AuthService register() member: {}", member);
-
 		UsernamePasswordAuthenticationToken authenticationToken = registerRequest.toAuthentication();
 
-		log.info(">>> AuthService register() authenticationToken: {}", authenticationToken);
-
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-		log.info(">>> AuthService register() authentication: {}", authentication);
 
 		JwtToken jwtToken = jwtUtil.generateToken(authentication);
 
