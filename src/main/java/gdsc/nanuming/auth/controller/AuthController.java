@@ -24,13 +24,13 @@ public class AuthController {
 
 	private final AuthService authService;
 
-	@PostMapping("register")
+	@PostMapping("/register")
 	public BaseResponseWithData<RegisterResponse> register(@RequestBody RegisterRequest registerRequest) {
 		log.info(">>> AuthController register()");
 		return BaseResponseWithData.of(RESPONSE_SUCCESS, authService.register(registerRequest));
 	}
 
-	@PostMapping("login")
+	@PostMapping("/login")
 	public BaseResponseWithData<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
 		log.info(">>> AuthController login()");
 		return BaseResponseWithData.of(RESPONSE_SUCCESS, authService.login(loginRequest));
