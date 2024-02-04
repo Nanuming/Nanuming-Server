@@ -8,16 +8,15 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import gdsc.nanuming.jwt.config.JwtConfig;
 import gdsc.nanuming.jwt.dto.JwtToken;
+import gdsc.nanuming.security.util.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -33,11 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtUtil {
 
-	@Value("sm://JWT_ACCESS_TOKEN_PERIOD")
-	private String accessTokenPeriod;
-
-	@Value("sm://JWT_REFRESH_TOKEN_PERIOD")
-	private String refreshTokenPeriod;
+	private final JwtConfig jwtConfig;
 
 	private static final String AUTHORITIES_KEY = "auth";
 
@@ -45,7 +40,9 @@ public class JwtUtil {
 
 	@PostConstruct
 	protected void init() {
+		log.info(">>> JwtUtil init()");
 		secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+		log.info(">>> JwtUtil init() secretKey: {}", secretKey);
 	}
 
 	public JwtToken generateToken(Authentication authentication) {
@@ -59,13 +56,20 @@ public class JwtUtil {
 	private String generateAccessToken(Authentication authentication) {
 
 		String authorities = getAuthorities(authentication);
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 		Date currentTime = new Date();
+		Long accessTokenPeriod = jwtConfig.getAccessTokenPeriod();
 		Date tokenExpirationTime = getTokenExpirationTime(currentTime, accessTokenPeriod);
+
+		String email = userDetails.getEmail();
+		String nickname = userDetails.getNickname();
 
 		return
 			Jwts.builder()
 				.setSubject(authentication.getName())
 				.claim(AUTHORITIES_KEY, authorities)
+				.claim("email", email)
+				.claim("nickname", nickname)
 				.setIssuedAt(currentTime)
 				.setExpiration(tokenExpirationTime)
 				.signWith(secretKey)
@@ -75,6 +79,7 @@ public class JwtUtil {
 	private String generateRefreshToken() {
 
 		Date currentTime = new Date();
+		Long refreshTokenPeriod = jwtConfig.getRefreshTokenPeriod();
 		Date tokenExpirationTime = getTokenExpirationTime(currentTime, refreshTokenPeriod);
 
 		return
@@ -100,9 +105,14 @@ public class JwtUtil {
 				.map(SimpleGrantedAuthority::new)
 				.toList();
 
-		UserDetails principal = new User(claims.getSubject(), null, authorities);
+		CustomUserDetails userDetails = CustomUserDetails.of(
+			claims.getSubject(),
+			(String)claims.get("email"),
+			(String)claims.get("nickname"),
+			authorities
+		);
 
-		return new UsernamePasswordAuthenticationToken(principal, null, authorities);
+		return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
 	}
 
 	private Claims parseClaims(String token) {
@@ -143,9 +153,8 @@ public class JwtUtil {
 			.collect(Collectors.joining(","));
 	}
 
-	private Date getTokenExpirationTime(Date currentTime, String tokenPeriod) {
-		long parsedTokenPeriod = Long.parseLong(tokenPeriod);
-		return new Date(currentTime.getTime() + parsedTokenPeriod);
+	private Date getTokenExpirationTime(Date currentTime, Long tokenPeriod) {
+		return new Date(currentTime.getTime() + tokenPeriod);
 	}
 
 }
