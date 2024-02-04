@@ -48,12 +48,14 @@ public class AuthService {
 
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+
 		JwtToken jwtToken = jwtUtil.generateToken(authentication);
 
 		// TODO: need refactor - extract meethod RefreshToken building
 		RefreshToken refreshToken = RefreshToken.of(
+			userDetails.getUsername(),
 			jwtToken.getRefreshToken(),
-			member.getProviderId(),
 			jwtConfig.getRefreshTokenPeriod());
 		log.info(">>> AuthService register() refreshToken: {}", refreshToken);
 
