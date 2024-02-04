@@ -17,4 +17,14 @@ public class ReissueResponse {
 		this.nickname = nickname;
 		this.token = token;
 	}
+
+	public static ReissueResponse of(String providerId, String nickname, JwtToken token) {
+		return ReissueResponse.builder()
+			.providerId(providerId)
+			.nickname(nickname)
+			.token(token)
+			.build();
+
+	}
+
 }
