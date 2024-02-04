@@ -147,6 +147,14 @@ public class JwtUtil {
 		}
 	}
 
+	public String getProviderId(String accessToken) {
+		return Jwts.parserBuilder()
+			.setSigningKey(secretKey)
+			.build().parseClaimsJws(accessToken)
+			.getBody()
+			.getSubject();
+	}
+
 	private String getAuthorities(Authentication authentication) {
 		return authentication.getAuthorities().stream()
 			.map(GrantedAuthority::getAuthority)
