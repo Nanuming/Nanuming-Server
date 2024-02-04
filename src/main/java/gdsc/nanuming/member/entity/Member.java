@@ -1,14 +1,12 @@
 package gdsc.nanuming.member.entity;
 
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import gdsc.nanuming.common.BaseEntity;
 import gdsc.nanuming.member.MemberRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,7 +18,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
 public class Member extends BaseEntity {
 
 	@Id
@@ -28,7 +25,6 @@ public class Member extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(unique = true)
 	private String email;
 
 	private String nickname;
@@ -38,23 +34,25 @@ public class Member extends BaseEntity {
 
 	private String picture;
 
-	@Enumerated(EnumType.STRING)
+	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private MemberRole role;
 
 	@Builder
-	private Member(String email, String providerId, String picture, MemberRole role) {
+	private Member(String email, String nickname, String providerId, String picture, MemberRole role) {
 		this.email = email;
+		this.nickname = nickname;
 		this.providerId = providerId;
 		this.picture = picture;
 		this.role = role;
 	}
 
-	public static Member of(String email, String providerId, String picture) {
+	public static Member of(String email, String nickname, String providerId, String picture) {
 		return Member.builder()
 			.email(email)
+			.nickname(nickname)
 			.providerId(providerId)
 			.picture(picture)
-			.role(MemberRole.GUEST)
+			.role(MemberRole.USER)
 			.build();
 	}
 }

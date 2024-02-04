@@ -1,7 +1,7 @@
 spring:
   config:
     import:
-      "sm://"
+      - "sm://"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${sm://DB_HOST}
