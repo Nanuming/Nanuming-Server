@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gdsc.nanuming.auth.dto.request.LoginRequest;
 import gdsc.nanuming.auth.dto.request.RegisterRequest;
+import gdsc.nanuming.auth.dto.request.ReissueRequest;
 import gdsc.nanuming.auth.dto.response.LoginResponse;
 import gdsc.nanuming.auth.dto.response.RegisterResponse;
+import gdsc.nanuming.auth.dto.response.ReissueResponse;
 import gdsc.nanuming.auth.service.AuthService;
 import gdsc.nanuming.common.response.BaseResponseWithData;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +36,11 @@ public class AuthController {
 	public BaseResponseWithData<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
 		log.info(">>> AuthController login()");
 		return BaseResponseWithData.of(RESPONSE_SUCCESS, authService.login(loginRequest));
+	}
+
+	@PostMapping("/reissue")
+	public BaseResponseWithData<ReissueResponse> reissue(@RequestBody ReissueRequest reissueRequest) {
+		log.info(">>> AuthController reissue()");
+		return BaseResponseWithData.of(RESPONSE_SUCCESS, authService.reissue(reissueRequest));
 	}
 }
