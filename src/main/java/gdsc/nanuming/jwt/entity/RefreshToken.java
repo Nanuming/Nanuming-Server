@@ -33,4 +33,10 @@ public class RefreshToken {
 			.tokenPeriod(tokenPeriod)
 			.build();
 	}
+
+	public RefreshToken updateRefreshToken(String newRefreshToken) {
+		this.refreshToken = newRefreshToken;
+		return this;
+	}
+
 }
