@@ -1,7 +1,6 @@
 package gdsc.nanuming.auth.dto.response;
 
 import gdsc.nanuming.jwt.dto.JwtToken;
-import gdsc.nanuming.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,10 +18,10 @@ public class RegisterResponse {
 		this.token = token;
 	}
 
-	public static RegisterResponse of(Member member, JwtToken token) {
+	public static RegisterResponse of(String providerId, String nickname, JwtToken token) {
 		return RegisterResponse.builder()
-			.providerId(member.getProviderId())
-			.nickname(member.getNickname())
+			.providerId(providerId)
+			.nickname(nickname)
 			.token(token)
 			.build();
 	}
