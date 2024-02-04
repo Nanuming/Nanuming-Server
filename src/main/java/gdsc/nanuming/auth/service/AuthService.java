@@ -77,11 +77,6 @@ public class AuthService {
 
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 
-		log.info(">>>>>>>>>>>>>>>>>>>>> {}", userDetails.getEmail());
-		log.info(">>>>>>>>>>>>>>>>>>>>> {}", userDetails.getNickname());
-		log.info(">>>>>>>>>>>>>>>>>>>>> {}", userDetails.getUsername());
-		log.info(">>>>>>>>>>>>>>>>>>>>> {}", userDetails.getAuthorities());
-
 		JwtToken jwtToken = jwtUtil.generateToken(authentication);
 
 		RefreshToken refreshToken = RefreshToken.of(
