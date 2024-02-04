@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public class ReissueRequest {
 
-	private String providerId;
+	private String accessToken;
+	private String refreshToken;
 
 }
