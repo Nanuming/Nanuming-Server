@@ -1,8 +1,6 @@
-package gdsc.nanuming.jwt.entity;
+package gdsc.nanuming.redis.entity;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.TimeToLive;
 
 import lombok.Builder;
 import lombok.Getter;
