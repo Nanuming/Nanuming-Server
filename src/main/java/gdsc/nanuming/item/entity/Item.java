@@ -1,5 +1,8 @@
 package gdsc.nanuming.item.entity;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import gdsc.nanuming.common.BaseEntity;
 import gdsc.nanuming.item.SaveStatus;
 import gdsc.nanuming.member.entity.Member;
@@ -38,6 +41,7 @@ public class Item extends BaseEntity {
 
 	private String description;
 
+	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private SaveStatus saveStatus = SaveStatus.TEMPORARY;
 
 	private boolean shared = false;
