@@ -1,6 +1,7 @@
 package gdsc.nanuming.item.entity;
 
-public class Item {
+
+public class Item extends BaseEntity {
 
 	private Long id;
 
