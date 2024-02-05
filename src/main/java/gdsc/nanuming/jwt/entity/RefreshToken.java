@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@RedisHash(value = "refreshToken")
 public class RefreshToken {
 
 	@Id
@@ -16,21 +15,16 @@ public class RefreshToken {
 
 	private String refreshToken;
 
-	@TimeToLive
-	private Long tokenPeriod;
-
 	@Builder
-	private RefreshToken(final String providerId, final String refreshToken, final Long tokenPeriod) {
+	private RefreshToken(final String providerId, final String refreshToken) {
 		this.providerId = providerId;
 		this.refreshToken = refreshToken;
-		this.tokenPeriod = tokenPeriod;
 	}
 
-	public static RefreshToken of(String providerId, String refreshToken, Long tokenPeriod) {
+	public static RefreshToken of(String providerId, String refreshToken) {
 		return RefreshToken.builder()
 			.providerId(providerId)
 			.refreshToken(refreshToken)
-			.tokenPeriod(tokenPeriod)
 			.build();
 	}
 
