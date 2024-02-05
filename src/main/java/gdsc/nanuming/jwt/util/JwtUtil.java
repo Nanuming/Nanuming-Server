@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class JwtUtil {
 
-	private static final String AUTHORITIES_KEY = "auth";
+	private static final String AUTHORITY = "auth";
 	private final Long accessTokenPeriod;
 	private final Long refreshTokenPeriod;
 
@@ -62,15 +62,12 @@ public class JwtUtil {
 		Date currentTime = new Date();
 		Date tokenExpirationTime = designateTokenPeriod(currentTime, accessTokenPeriod);
 
-		String email = userDetails.getEmail();
-		String nickname = userDetails.getNickname();
-
 		return
 			Jwts.builder()
 				.setSubject(userDetails.getUsername())
-				.claim(AUTHORITIES_KEY, userDetails.getAuthorities())
-				.claim("email", email)
-				.claim("nickname", nickname)
+				.claim(AUTHORITY, getAuthority(userDetails))
+				.claim("email", userDetails.getEmail())
+				.claim("nickname", userDetails.getNickname())
 				.setIssuedAt(currentTime)
 				.setExpiration(tokenExpirationTime)
 				.signWith(secretKey)
@@ -95,13 +92,13 @@ public class JwtUtil {
 		Claims claims = parseClaims(token);
 
 		// TODO: need custom exception processing
-		if (claims.get(AUTHORITIES_KEY) == null) {
-			throw new RuntimeException("Token without authorities.");
+		if (claims.get(AUTHORITY) == null) {
+			throw new RuntimeException("Token without authority.");
 		}
 
 		// get authorities from claims
 		Collection<? extends GrantedAuthority> authorities =
-			Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+			Arrays.stream(claims.get(AUTHORITY).toString().split(","))
 				.map(SimpleGrantedAuthority::new)
 				.toList();
 
@@ -166,8 +163,8 @@ public class JwtUtil {
 		return (expiration.getTime() - now);
 	}
 
-	private String getAuthorities(Authentication authentication) {
-		return authentication.getAuthorities().stream()
+	private String getAuthority(CustomUserDetails userDetails) {
+		return userDetails.getAuthorities().stream()
 			.map(GrantedAuthority::getAuthority)
 			.collect(Collectors.joining(","));
 	}
