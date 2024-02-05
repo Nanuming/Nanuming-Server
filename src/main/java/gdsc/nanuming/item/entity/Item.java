@@ -1,6 +1,7 @@
 package gdsc.nanuming.item.entity;
 
 import gdsc.nanuming.common.BaseEntity;
+import gdsc.nanuming.item.SaveStatus;
 import gdsc.nanuming.member.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,5 +37,8 @@ public class Item extends BaseEntity {
 	private String title;
 
 	private String description;
+
+	private SaveStatus saveStatus = SaveStatus.TEMPORARY;
+
 
 }
