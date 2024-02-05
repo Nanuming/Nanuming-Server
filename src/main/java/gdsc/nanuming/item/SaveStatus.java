@@ -6,4 +6,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum SaveStatus {
+
+	TEMPORARY("temporary"),
+	SAVED("saved");
+
+	private final String value;
+
 }
