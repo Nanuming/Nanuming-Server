@@ -1,5 +1,7 @@
 package gdsc.nanuming.redis.repository;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,4 +23,13 @@ public class BlacklistTokenRepository {
 		redisTemplate.expire(blacklistToken.getAccessToken(), remainingExpirationTime, TimeUnit.MILLISECONDS);
 	}
 
+	public Optional<BlacklistToken> findByAccessToken(final String accessToken) {
+		ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+		String status = valueOperations.get(accessToken);
+
+		if (Objects.isNull(status)) {
+			return Optional.empty();
+		}
+		return Optional.of(BlacklistToken.of(accessToken, status));
+	}
 }
