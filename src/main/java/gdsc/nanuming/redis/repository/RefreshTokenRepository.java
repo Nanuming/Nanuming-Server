@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
-import gdsc.nanuming.jwt.entity.RefreshToken;
+import gdsc.nanuming.redis.entity.RefreshToken;
 
 @Repository
 public class RefreshTokenRepository {
@@ -40,4 +40,9 @@ public class RefreshTokenRepository {
 
 		return Optional.of(RefreshToken.of(providerId, refreshToken));
 	}
+
+	public void delete(final String providerId) {
+		redisTemplate.delete(providerId);
+	}
+
 }
