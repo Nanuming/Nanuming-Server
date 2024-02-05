@@ -1,4 +1,4 @@
 package gdsc.nanuming.item.dto.response;
 
-public class ItemAddResponse {
+public class AddItemResponse {
 }
