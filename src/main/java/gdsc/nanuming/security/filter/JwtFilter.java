@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import gdsc.nanuming.jwt.util.JwtUtil;
+import gdsc.nanuming.redis.repository.BlacklistTokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	public static final int PREFIX_LENGTH = PREFIX.length();
 
 	private final JwtUtil jwtUtil;
+	private final BlacklistTokenRepository blacklistTokenRepository;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -38,8 +40,10 @@ public class JwtFilter extends OncePerRequestFilter {
 		log.info(">>> JwtFilter doFilterInternal() jwt: {}", jwt);
 
 		if (StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt)) {
-			Authentication authentication = jwtUtil.getAuthentication(jwt);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			if (blacklistTokenRepository.findByAccessToken(jwt).isEmpty()) {
+				Authentication authentication = jwtUtil.getAuthentication(jwt);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
 		}
 
 		filterChain.doFilter(request, response);
