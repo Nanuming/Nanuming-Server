@@ -40,5 +40,6 @@ public class Item extends BaseEntity {
 
 	private SaveStatus saveStatus = SaveStatus.TEMPORARY;
 
+	private boolean shared = false;
 
 }
