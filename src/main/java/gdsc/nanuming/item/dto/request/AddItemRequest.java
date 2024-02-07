@@ -2,6 +2,9 @@ package gdsc.nanuming.item.dto.request;
 
 import java.util.List;
 
+import lombok.Getter;
+
+@Getter
 public class AddItemRequest {
 
 	private Long sharerId;
