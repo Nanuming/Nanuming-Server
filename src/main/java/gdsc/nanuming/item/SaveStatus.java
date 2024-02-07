@@ -1,15 +1,14 @@
-package gdsc.nanuming.member;
+package gdsc.nanuming.item;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum MemberRole {
+public enum SaveStatus {
 
-	GUEST("ROLE_GUEST"),
-	USER("ROLE_USER"),
-	ADMIN("ROLE_ADMIN");
+	TEMPORARY("temporary"),
+	SAVED("saved");
 
 	private final String value;
 
