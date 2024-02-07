@@ -1,10 +1,15 @@
 package gdsc.nanuming.item.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import gdsc.nanuming.common.BaseEntity;
+import gdsc.nanuming.image.entity.ItemImage;
 import gdsc.nanuming.item.SaveStatus;
+import gdsc.nanuming.locker.entity.Locker;
 import gdsc.nanuming.member.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +18,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,11 +39,16 @@ public class Item extends BaseEntity {
 	@JoinColumn(name = "sharer_id")
 	private Member sharer;
 
-	@Column(name = "main_image_id")
-	private Long mainImageId;
+	@OneToOne
+	@JoinColumn(name = "locker_id")
+	private Locker locker;
 
-	@Column(name = "locker_id")
-	private Long lockerId;
+	@OneToOne
+	@JoinColumn(name = "main_image_id")
+	private ItemImage mainItemImage;
+
+	@OneToMany(mappedBy = "item")
+	private List<ItemImage> itemImageList = new ArrayList<>();
 
 	private String title;
 
@@ -46,4 +59,30 @@ public class Item extends BaseEntity {
 
 	private boolean shared = false;
 
+	@Builder
+	private Item(Member sharer, Locker locker, String title, String description) {
+		this.sharer = sharer;
+		this.locker = locker;
+		this.title = title;
+		this.description = description;
+	}
+
+	public static Item of(Member sharer, Locker locker, String title, String description) {
+		return Item.builder()
+			.sharer(sharer)
+			.locker(locker)
+			.title(title)
+			.description(description)
+			.build();
+	}
+
+	public void addMainItemImage(ItemImage itemImage) {
+		this.mainItemImage = itemImage;
+	}
+
+	public void addItemImageList(List<ItemImage> itemImageList) {
+		itemImageList.forEach(itemImage -> {
+			this.itemImageList.add(itemImage.addItem(this));
+		});
+	}
 }
