@@ -41,4 +41,9 @@ public class ItemImage extends BaseEntity {
 			.itemImageUrl(itemImageUrl)
 			.build();
 	}
+
+	public ItemImage addItem(Item item) {
+		this.item = item;
+		return this;
+	}
 }
