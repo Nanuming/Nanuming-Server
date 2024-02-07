@@ -29,18 +29,16 @@ public class ItemImage extends BaseEntity {
 	private Item item;
 
 	@Column(name = "image_url")
-	private String imageUrl;
+	private String itemImageUrl;
 
 	@Builder
-	private ItemImage(Item item, String imageUrl) {
-		this.item = item;
-		this.imageUrl = imageUrl;
+	private ItemImage(String itemImageUrl) {
+		this.itemImageUrl = itemImageUrl;
 	}
 
-	public static ItemImage of(Item item, String imageUrl) {
+	public static ItemImage from(String itemImageUrl) {
 		return ItemImage.builder()
-			.item(item)
-			.imageUrl(imageUrl)
+			.itemImageUrl(itemImageUrl)
 			.build();
 	}
 }
