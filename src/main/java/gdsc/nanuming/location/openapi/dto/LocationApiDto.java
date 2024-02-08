@@ -23,4 +23,15 @@ public class LocationApiDto {
 		this.longitude = longitude;
 	}
 
+	public static LocationApiDto of(long stCode, long zipCode, String name, String address, double latitude,
+		double longitude) {
+		return LocationApiDto.builder()
+			.stCode(stCode)
+			.zipCode(zipCode)
+			.name(name)
+			.address(address)
+			.latitude(latitude)
+			.longitude(longitude)
+			.build();
+	}
 }
