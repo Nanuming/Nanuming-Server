@@ -1,5 +1,6 @@
 package gdsc.nanuming.location.openapi.dto;
 
+import gdsc.nanuming.location.entity.Location;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -34,4 +35,13 @@ public class LocationApiDto {
 			.longitude(longitude)
 			.build();
 	}
+
+	public Location toEntity() {
+		return Location.of(
+			createDescription(),
+			this.latitude,
+			this.longitude
+		);
+	}
+
 }
