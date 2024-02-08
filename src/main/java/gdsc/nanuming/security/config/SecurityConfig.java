@@ -51,6 +51,7 @@ public class SecurityConfig {
 
 		http.authorizeHttpRequests(httpRequests -> httpRequests
 			.requestMatchers("/api/auth/**").permitAll()
+			.requestMatchers("/openapi/**").permitAll()
 			.anyRequest().authenticated()
 		);
 
