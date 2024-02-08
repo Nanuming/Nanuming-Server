@@ -1,20 +1,26 @@
 package gdsc.nanuming.location.openapi.controller;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import gdsc.nanuming.common.code.CommonCode;
+import gdsc.nanuming.common.response.BaseResponse;
+import gdsc.nanuming.location.openapi.service.OpenApiService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/openapi")
 public class OpenApiController {
 
-	@Value("${sm://CHILD_CARE_INFO_API_KEY}")
-	private String childCareInfoApiKey;
+	private final OpenApiService openApiService;
 
-	@Value("${sm://CHILD_CARE_INFO_API_URL}")
-	private String childCareInfoApiUrl;
-
-	@Value("${sm://CHILD_CARE_INFO_API_DATA_TYPE}")
-	private String childCareInfoApiDataType;
-
+	@GetMapping("/childCareInfo/load")
+	public BaseResponse callChildCareInfoApi() {
+		openApiService.callChildCareInfoApi();
+		return BaseResponse.from(CommonCode.RESPONSE_SUCCESS);
+	}
 }
