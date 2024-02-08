@@ -6,9 +6,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/openapi")
-public class ChildCareInfoApiController {
+public class OpenApiController {
 
 	@Value("${sm://CHILD_CARE_INFO_API_KEY}")
-	private String childeCareInfoApiKey;
+	private String childCareInfoApiKey;
+
+	@Value("${sm://CHILD_CARE_INFO_API_URL}")
+	private String childCareInfoApiUrl;
+
+	@Value("${sm://CHILD_CARE_INFO_API_DATA_TYPE}")
+	private String childCareInfoApiDataType;
 
 }
