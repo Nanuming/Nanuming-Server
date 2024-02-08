@@ -1,5 +1,9 @@
 package gdsc.nanuming.location.openapi.dto;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
 public class LocationApiDto {
 
 	private long stCode;
@@ -9,6 +13,7 @@ public class LocationApiDto {
 	private double latitude;
 	private double longitude;
 
+	@Builder
 	private LocationApiDto(long stCode, long zipCode, String name, String address, double latitude, double longitude) {
 		this.stCode = stCode;
 		this.zipCode = zipCode;
