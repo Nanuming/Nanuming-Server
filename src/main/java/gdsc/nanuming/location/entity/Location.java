@@ -37,4 +37,11 @@ public class Location {
 		this.longitude = longitude;
 	}
 
+	public static Location of(String description, double latitude, double longitude) {
+		return Location.builder()
+			.description(description)
+			.latitude(latitude)
+			.longitude(longitude)
+			.build();
+	}
 }
