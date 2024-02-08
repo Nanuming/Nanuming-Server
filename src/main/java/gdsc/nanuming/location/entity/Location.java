@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -28,4 +29,12 @@ public class Location {
 
 	@OneToMany(mappedBy = "location")
 	private List<Locker> lockerList;
+
+	@Builder
+	private Location(String description, double latitude, double longitude) {
+		this.description = description;
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+
 }
