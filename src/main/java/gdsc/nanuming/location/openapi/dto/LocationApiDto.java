@@ -44,4 +44,7 @@ public class LocationApiDto {
 		);
 	}
 
+	private String createDescription() {
+		return this.address + this.name;
+	}
 }
