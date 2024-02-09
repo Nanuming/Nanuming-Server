@@ -11,6 +11,7 @@ spring:
     redis:
       host: ${sm://REDIS_HOST}
       port: ${sm://REDIS_PORT}
+      password: ${sm://REDIS_PASSWORD}
   jpa:
     show-sql: true
     hibernate:
