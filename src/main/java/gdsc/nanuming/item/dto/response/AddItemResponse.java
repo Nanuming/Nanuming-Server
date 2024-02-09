@@ -13,6 +13,7 @@ public class AddItemResponse {
 		this.id = id;
 	}
 
+
 	public static AddItemResponse from(Long id) {
 		return AddItemResponse.builder()
 			.id(id)

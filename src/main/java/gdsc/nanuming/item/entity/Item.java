@@ -6,9 +6,9 @@ import java.util.List;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import gdsc.nanuming.category.entity.Category;
 import gdsc.nanuming.common.BaseEntity;
 import gdsc.nanuming.image.entity.ItemImage;
-import gdsc.nanuming.item.SaveStatus;
 import gdsc.nanuming.locker.entity.Locker;
 import gdsc.nanuming.member.entity.Member;
 import jakarta.persistence.Column;
@@ -50,6 +50,10 @@ public class Item extends BaseEntity {
 	@OneToMany(mappedBy = "item")
 	private List<ItemImage> itemImageList = new ArrayList<>();
 
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
+
 	private String title;
 
 	private String description;
@@ -60,17 +64,17 @@ public class Item extends BaseEntity {
 	private boolean shared = false;
 
 	@Builder
-	private Item(Member sharer, Locker locker, String title, String description) {
+	private Item(Member sharer, Category category, String title, String description) {
 		this.sharer = sharer;
-		this.locker = locker;
+		this.category = category;
 		this.title = title;
 		this.description = description;
 	}
 
-	public static Item of(Member sharer, Locker locker, String title, String description) {
+	public static Item of(Member sharer, Category category, String title, String description) {
 		return Item.builder()
 			.sharer(sharer)
-			.locker(locker)
+			.category(category)
 			.title(title)
 			.description(description)
 			.build();
