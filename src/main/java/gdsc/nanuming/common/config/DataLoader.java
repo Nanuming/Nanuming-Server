@@ -2,6 +2,7 @@ package gdsc.nanuming.common.config;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import gdsc.nanuming.category.entity.Category;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Profile({"local", "prod"})
 public class DataLoader implements ApplicationRunner {
 
 	private final LockerRepository lockerRepository;
