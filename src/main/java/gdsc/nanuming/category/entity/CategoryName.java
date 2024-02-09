@@ -7,11 +7,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum CategoryName {
 
-	TOY("toy"),
-	BOOK("book"),
-	CLOTHES("clothes"),
-	NURTURE_PRODUCT("nurture product"),
-	ETC("etc");
+	TOY("장난감"),
+	BOOK("도서"),
+	CLOTHES("의류"),
+	NURTURE_PRODUCT("육아용품"),
+	ETC("기타");
 
 	private final String name;
 
