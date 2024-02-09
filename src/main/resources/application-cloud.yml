@@ -9,6 +9,8 @@ spring:
     password: ${sm://TEST_DB_PASSWORD}
   data:
     redis:
+      repositories:
+        enabled: false
       host: ${sm://REDIS_HOST}
       port: ${sm://REDIS_PORT}
       password: ${sm://REDIS_PASSWORD}
