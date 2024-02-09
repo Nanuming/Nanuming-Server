@@ -1,4 +1,4 @@
-package gdsc.nanuming.item;
+package gdsc.nanuming.item.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
