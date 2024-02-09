@@ -53,8 +53,9 @@ public class ItemService {
 			itemImageList.add(savedItemImage);
 		}
 
-		Category category = categoryRepository.findByCategoryName(addItemRequest.getCategoryName())
+		Category category = categoryRepository.findById(addItemRequest.getCategoryId())
 			.orElseThrow(() -> new IllegalArgumentException("No category found."));
+		log.info(">>> category: {}", category.getCategoryName());
 
 		Item newTemporaryItem = addItemRequest.toEntity(sharer, category);
 		log.info(">>> temporary newTemporaryItem: {}", newTemporaryItem);

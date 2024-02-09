@@ -11,7 +11,7 @@ import lombok.Getter;
 public class AddItemRequest {
 
 	private Long sharerId;
-	private String categoryName;
+	private Long categoryId;
 	private String title;
 	private String description;
 	private List<String> imageList;
