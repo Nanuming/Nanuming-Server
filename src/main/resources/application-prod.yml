@@ -1,12 +1,16 @@
 spring:
   config:
     import:
-      "sm://"
+      - "sm://"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${sm://DB_HOST}
     username: ${sm://DB_USER}
     password: ${sm://DB_PASSWORD}
+  data:
+    redis:
+      host: ${sm://REDIS_HOST}
+      port: ${sm://REDIS_PORT}
   jpa:
     properties:
       hibernate:

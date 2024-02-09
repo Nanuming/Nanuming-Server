@@ -7,6 +7,10 @@ spring:
     url: ${sm://TEST_DB_HOST}
     username: ${sm://TEST_DB_USER}
     password: ${sm://TEST_DB_PASSWORD}
+  data:
+    redis:
+      host: ${sm://REDIS_HOST}
+      port: ${sm://REDIS_PORT}
   jpa:
     show-sql: true
     hibernate:
