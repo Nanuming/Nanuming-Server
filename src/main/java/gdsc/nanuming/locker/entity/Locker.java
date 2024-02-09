@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,4 +35,17 @@ public class Locker {
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private LockerStatus status = LockerStatus.EMPTY;
+
+	@Builder
+	private Locker(Location location, LockerSize size) {
+		this.location = location;
+		this.size = size;
+	}
+
+	public static Locker of(Location location, LockerSize size) {
+		return Locker.builder()
+			.location(location)
+			.size(size)
+			.build();
+	}
 }
