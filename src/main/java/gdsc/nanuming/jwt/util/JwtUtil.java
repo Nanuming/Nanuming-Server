@@ -64,10 +64,10 @@ public class JwtUtil {
 
 		return
 			Jwts.builder()
+				.claim("id", userDetails.getId())
 				.setSubject(userDetails.getUsername())
-				.claim(AUTHORITY, getAuthority(userDetails))
-				.claim("email", userDetails.getEmail())
 				.claim("nickname", userDetails.getNickname())
+				.claim(AUTHORITY, getAuthority(userDetails))
 				.setIssuedAt(currentTime)
 				.setExpiration(tokenExpirationTime)
 				.signWith(secretKey)
@@ -103,8 +103,8 @@ public class JwtUtil {
 				.toList();
 
 		CustomUserDetails userDetails = CustomUserDetails.of(
+			((Number)claims.get("id")).longValue(),
 			claims.getSubject(),
-			(String)claims.get("email"),
 			(String)claims.get("nickname"),
 			authorities
 		);
@@ -150,6 +150,13 @@ public class JwtUtil {
 			.build().parseClaimsJws(accessToken)
 			.getBody()
 			.getSubject();
+	}
+
+	public Long getId(String accessToken) {
+		return Long.parseLong(Jwts.parserBuilder()
+			.setSigningKey(secretKey)
+			.build().parseClaimsJws(accessToken)
+			.getBody().get("id").toString());
 	}
 
 	public long getRemainingExpirationTime(String accessToken) {

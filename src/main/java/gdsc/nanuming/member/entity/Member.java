@@ -24,33 +24,25 @@ public class Member extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String email;
-
 	private String nickname;
 
 	@Column(unique = true)
 	private String providerId;
 
-	private String picture;
-
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private MemberRole role;
 
 	@Builder
-	private Member(String email, String nickname, String providerId, String picture, MemberRole role) {
-		this.email = email;
+	private Member(String nickname, String providerId, MemberRole role) {
 		this.nickname = nickname;
 		this.providerId = providerId;
-		this.picture = picture;
 		this.role = role;
 	}
 
-	public static Member of(String email, String nickname, String providerId, String picture) {
+	public static Member of(String nickname, String providerId) {
 		return Member.builder()
-			.email(email)
 			.nickname(nickname)
 			.providerId(providerId)
-			.picture(picture)
 			.role(MemberRole.USER)
 			.build();
 	}

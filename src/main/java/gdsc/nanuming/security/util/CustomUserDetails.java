@@ -8,32 +8,31 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.Builder;
 import lombok.Getter;
 
+@Getter
 public class CustomUserDetails implements UserDetails {
+
+	private Long id;
 
 	private String providerId;
 
-	@Getter
-	private String email;
-
-	@Getter
 	private String nickname;
 
 	private Collection<? extends GrantedAuthority> authorities;
 
 	@Builder
-	private CustomUserDetails(String providerId, String email, String nickname,
+	private CustomUserDetails(Long id, String providerId, String nickname,
 		Collection<? extends GrantedAuthority> authorities) {
+		this.id = id;
 		this.providerId = providerId;
-		this.email = email;
 		this.nickname = nickname;
 		this.authorities = authorities;
 	}
 
-	public static CustomUserDetails of(String providerId, String email, String nickname,
+	public static CustomUserDetails of(Long id, String providerId, String nickname,
 		Collection<? extends GrantedAuthority> authorities) {
 		return CustomUserDetails.builder()
+			.id(id)
 			.providerId(providerId)
-			.email(email)
 			.nickname(nickname)
 			.authorities(authorities)
 			.build();

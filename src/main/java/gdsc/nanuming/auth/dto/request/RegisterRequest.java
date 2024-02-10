@@ -1,30 +1,19 @@
 package gdsc.nanuming.auth.dto.request;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 import gdsc.nanuming.member.entity.Member;
 import lombok.Getter;
 
 @Getter
-public class RegisterRequest implements AuthenticationConvertible {
+public class RegisterRequest {
 
-	private String email;
+	private String idToken;
 	private String nickname;
-	private String provider;
-	private String providerId;
-	private String picture;
 
-	public Member toMember() {
+	public Member toMember(String providerId) {
 		return Member.of(
-			this.email,
 			this.nickname,
-			this.providerId,
-			this.picture
+			providerId
 		);
 	}
 
-	@Override
-	public UsernamePasswordAuthenticationToken toAuthentication() {
-		return new UsernamePasswordAuthenticationToken(this.providerId, null);
-	}
 }
