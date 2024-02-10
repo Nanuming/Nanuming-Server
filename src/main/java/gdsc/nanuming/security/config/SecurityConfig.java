@@ -10,7 +10,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import gdsc.nanuming.security.CustomAuthenticationProvider;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+
 import gdsc.nanuming.security.entrypoint.JwtAuthenticationEntryPoint;
 import gdsc.nanuming.security.filter.JwtFilter;
 import gdsc.nanuming.security.handler.JwtAccessDeniedHandler;
@@ -57,6 +60,16 @@ public class SecurityConfig {
 
 		return http.build();
 
+	}
+
+	@Bean
+	public HttpTransport httpTransport() {
+		return new NetHttpTransport();
+	}
+
+	@Bean
+	public GsonFactory gsonFactory() {
+		return new GsonFactory();
 	}
 
 }
