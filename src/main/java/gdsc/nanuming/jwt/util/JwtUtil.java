@@ -103,7 +103,7 @@ public class JwtUtil {
 				.toList();
 
 		CustomUserDetails userDetails = CustomUserDetails.of(
-			(Long)claims.get("id"),
+			((Number)claims.get("id")).longValue(),
 			claims.getSubject(),
 			(String)claims.get("nickname"),
 			authorities
