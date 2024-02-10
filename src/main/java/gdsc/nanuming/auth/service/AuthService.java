@@ -7,7 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gdsc.nanuming.auth.dto.request.AuthenticationConvertible;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+
 import gdsc.nanuming.auth.dto.request.LoginRequest;
 import gdsc.nanuming.auth.dto.request.LogoutRequest;
 import gdsc.nanuming.auth.dto.request.RegisterRequest;
@@ -37,38 +38,64 @@ public class AuthService {
 	private final RefreshTokenRepository refreshTokenRepository;
 	private final BlacklistTokenRepository blacklistTokenRepository;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+	private final GoogleIdTokenVerifyService googleIdTokenVerifyService;
 
 	private static final String LOGOUT = "logout";
+	private static final String GOOGLE = "google_";
 
 	@Transactional
 	public RegisterResponse register(RegisterRequest registerRequest) {
 
-		String providerId = registerRequest.getProviderId();
+		String idToken = registerRequest.getIdToken();
+
+		Payload payload = googleIdTokenVerifyService.verify(idToken);
+
+		String subject = payload.getSubject();
+		log.info(">>> AuthService register() subject: {}", subject);
+		String providerId = GOOGLE + subject;
 
 		if (memberRepository.existsByProviderId(providerId)) {
 			// TODO: create ErrorResponse here
 			throw new RuntimeException("This user is already registered.");
 
 		}
-		memberRepository.save(registerRequest.toMember());
+		memberRepository.save(registerRequest.toMember(providerId));
 
-		CustomUserDetails userDetails = getUserDetails(registerRequest);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(providerId,
+			null);
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		log.info(">>> AuthService register() userDetails: {}", userDetails);
+
 		JwtToken jwtToken = jwtUtil.generateToken(userDetails);
 
 		saveRefreshToken(userDetails, jwtToken);
 
-		return RegisterResponse.of(userDetails.getUsername(), userDetails.getNickname(), jwtToken);
+		return RegisterResponse.of(userDetails.getId(), userDetails.getUsername(), userDetails.getNickname(), jwtToken);
 	}
 
 	@Transactional
 	public LoginResponse login(LoginRequest loginRequest) {
 
-		CustomUserDetails userDetails = getUserDetails(loginRequest);
+		String idToken = loginRequest.getIdToken();
+
+		Payload payload = googleIdTokenVerifyService.verify(idToken);
+
+		String subject = payload.getSubject();
+		log.info(">>> AuthService login() subject: {}", subject);
+		String providerId = GOOGLE + subject;
+
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(providerId,
+			null);
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		log.info(">>> AuthService register() userDetails: {}", userDetails);
+
 		JwtToken jwtToken = jwtUtil.generateToken(userDetails);
 
 		saveRefreshToken(userDetails, jwtToken);
 
-		return LoginResponse.of(userDetails.getUsername(), userDetails.getNickname(), jwtToken);
+		return LoginResponse.of(userDetails.getId(), userDetails.getUsername(), userDetails.getNickname(), jwtToken);
 	}
 
 	@Transactional
@@ -99,6 +126,13 @@ public class AuthService {
 	@Transactional
 	public ReissueResponse reissue(ReissueRequest reissueRequest) {
 
+		String idToken = reissueRequest.getIdToken();
+		Payload payload = googleIdTokenVerifyService.verify(idToken);
+
+		String subject = payload.getSubject();
+		log.info(">>> AuthService reissue() subject: {}", subject);
+		String providerId = GOOGLE + subject;
+
 		String accessToken = reissueRequest.getAccessToken();
 		String refreshToken = reissueRequest.getRefreshToken();
 		String providerIdFromAccessToken = jwtUtil.getProviderId(accessToken);
@@ -109,25 +143,23 @@ public class AuthService {
 		}
 
 		// TODO: need custom exception processing
-		RefreshToken storedRefreshToken = refreshTokenRepository.findByProviderId(providerIdFromAccessToken)
+		RefreshToken storedRefreshToken = refreshTokenRepository.findByProviderId(providerId)
 			.orElseThrow(() -> new RuntimeException("The saved Refresh Token could not be found."));
 
 		if (!storedRefreshToken.getProviderId().equals(providerIdFromAccessToken)) {
 			throw new RuntimeException("User information from token does not match.");
 		}
 
-		CustomUserDetails userDetails = getUserDetails(reissueRequest);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(providerId,
+			null);
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		log.info(">>> AuthService register() userDetails: {}", userDetails);
 		JwtToken jwtToken = jwtUtil.generateToken(userDetails);
 
 		saveRefreshToken(userDetails, jwtToken);
 
-		return ReissueResponse.of(userDetails.getUsername(), userDetails.getNickname(), jwtToken);
-	}
-
-	private CustomUserDetails getUserDetails(AuthenticationConvertible request) {
-		UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication();
-		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-		return (CustomUserDetails)authentication.getPrincipal();
+		return ReissueResponse.of(userDetails.getId(), userDetails.getUsername(), userDetails.getNickname(), jwtToken);
 	}
 
 	private void saveRefreshToken(CustomUserDetails userDetails, JwtToken jwtToken) {

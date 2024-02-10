@@ -41,8 +41,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 		log.info(">>> CustomUserDetailsService createCustomUserDetails() grantedAuthority: {}", grantedAuthority);
 
 		return CustomUserDetails.of(
+			member.getId(),
 			member.getProviderId(),
-			member.getEmail(),
 			member.getNickname(),
 			Collections.singleton(grantedAuthority));
 	}
