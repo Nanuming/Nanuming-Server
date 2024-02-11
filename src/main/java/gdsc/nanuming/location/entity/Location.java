@@ -2,6 +2,9 @@ package gdsc.nanuming.location.entity;
 
 import java.util.List;
 
+import org.locationtech.jts.geom.Point;
+
+import gdsc.nanuming.location.util.GeometryUtil;
 import gdsc.nanuming.locker.entity.Locker;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,6 +33,9 @@ public class Location {
 
 	private double longitude;
 
+	@Column(columnDefinition = "Point")
+	private Point point;
+
 	@OneToMany(mappedBy = "location")
 	private List<Locker> lockerList;
 
@@ -38,6 +44,7 @@ public class Location {
 		this.description = description;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.point = GeometryUtil.createPoint(longitude, latitude);
 	}
 
 	public static Location of(String description, double latitude, double longitude) {
