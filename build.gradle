@@ -41,6 +41,7 @@ dependencies {
     // google api client library
     implementation 'com.google.api-client:google-api-client:2.2.0'
 
+    // json-smart
     implementation 'net.minidev:json-smart:2.5.0'
 
     // jwt
