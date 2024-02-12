@@ -112,8 +112,13 @@ public class ItemService {
 		return AssignLockerResponse.of(item.getId(), locker.getId());
 	}
 
-	private ItemOutlineDto convertIntoItemOutlineDto(Item item) {
+	private List<String> convertIntoItemImageUrlList(List<ItemImage> itemImageList) {
+		return itemImageList.stream()
+			.map(ItemImage::getItemImageUrl)
+			.toList();
+	}
 
+	private ItemOutlineDto convertIntoItemOutlineDto(Item item) {
 		Long itemId = item.getId();
 		String mainImageUrl = item.getMainItemImage().getItemImageUrl();
 		String title = item.getTitle();
