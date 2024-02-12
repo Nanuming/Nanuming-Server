@@ -1,5 +1,6 @@
 package gdsc.nanuming.item.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import gdsc.nanuming.item.dto.request.AddItemRequest;
 import gdsc.nanuming.item.dto.request.AssignLockerRequest;
 import gdsc.nanuming.item.dto.response.AddItemResponse;
 import gdsc.nanuming.item.dto.response.AssignLockerResponse;
+import gdsc.nanuming.item.dto.response.ShowItemDetailResponse;
 import gdsc.nanuming.item.dto.response.ShowItemListResponse;
 import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.item.repository.ItemRepository;
@@ -72,6 +74,25 @@ public class ItemService {
 
 		Item savedItem = itemRepository.save(newTemporaryItem);
 		return AddItemResponse.from(savedItem.getId());
+	}
+
+	public ShowItemDetailResponse showItemDetail(Long itemId) {
+		log.info(">>> ItemService showItemDetail()");
+
+		Item item = itemRepository.findById(itemId)
+			.orElseThrow(() -> new IllegalArgumentException("No item found."));
+
+		List<String> itemImageUrlList = convertIntoItemImageUrlList(item.getItemImageList());
+		String category = item.getCategory().getCategoryName().getName();
+		String nickname = getCurrentUserDetails().getNickname();
+		Location location = item.getLocker().getLocation();
+		boolean isOwner = item.getSharer().getId().equals(getCurrentUserDetails().getId());
+		LocalDateTime createdAt = item.getCreatedAt();
+		LocalDateTime updatedAt = item.getUpdatedAt();
+
+		return ShowItemDetailResponse.of(itemId, itemImageUrlList, category,
+			nickname, location.getName(),
+			item.getDescription(), isOwner, createdAt, updatedAt);
 	}
 
 	public ShowItemListResponse showItemList(long locationId) {
