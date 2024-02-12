@@ -53,4 +53,10 @@ public class Locker {
 			.size(size)
 			.build();
 	}
+
+	public Locker storeItem(Item item) {
+		this.item = item;
+		this.status = LockerStatus.OCCUPIED;
+		return this;
+	}
 }
