@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gdsc.nanuming.common.response.BaseResponseWithData;
 import gdsc.nanuming.item.dto.request.AddItemRequest;
+import gdsc.nanuming.item.dto.request.AssignLockerRequest;
 import gdsc.nanuming.item.dto.response.AddItemResponse;
+import gdsc.nanuming.item.dto.response.AssignLockerResponse;
 import gdsc.nanuming.item.dto.response.ShowItemListResponse;
 import gdsc.nanuming.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +37,13 @@ public class ItemController {
 	public BaseResponseWithData<AddItemResponse> addTemporaryItem(@RequestBody AddItemRequest addItemRequest) {
 		log.info(">>> Run ItemController addTemporaryItem()");
 		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.addTemporaryItem(addItemRequest));
+	}
+
+	@PostMapping("/{itemId}/assign")
+	public BaseResponseWithData<AssignLockerResponse> assignLocker(
+		@PathVariable Long itemId,
+		@RequestBody AssignLockerRequest assignLockerRequest) {
+		log.info(">>> ItemController assignLocker()");
+		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.assignLocker(itemId, assignLockerRequest));
 	}
 }
