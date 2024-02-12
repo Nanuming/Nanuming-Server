@@ -78,10 +78,10 @@ public class ItemService {
 		Location location = locationRepository.findById(locationId)
 			.orElseThrow(() -> new IllegalArgumentException("No Location found."));
 
-		List<Locker> containedLockerList = location.getLockerList().stream()
+		List<Locker> occupiedLockerList = location.getLockerList().stream()
 			.filter(locker -> locker.getStatus() == LockerStatus.OCCUPIED).toList();
 
-		List<Item> itemList = containedLockerList.stream()
+		List<Item> itemList = occupiedLockerList.stream()
 			.flatMap(locker -> itemRepository.findByLockerId(locker.getId()).stream())
 			.toList();
 
