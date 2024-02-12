@@ -39,6 +39,7 @@ public class LocationApiDto {
 	public Location toEntity() {
 		return Location.of(
 			createDescription(),
+			this.name,
 			this.latitude,
 			this.longitude
 		);
