@@ -95,23 +95,23 @@ public class ItemService {
 			item.getDescription(), isOwner, createdAt, updatedAt);
 	}
 
-	public ShowItemListResponse showItemList(long locationId) {
-		Location location = locationRepository.findById(locationId)
-			.orElseThrow(() -> new IllegalArgumentException("No Location found."));
-
-		List<Locker> occupiedLockerList = location.getLockerList().stream()
-			.filter(locker -> locker.getStatus() == LockerStatus.OCCUPIED).toList();
-
-		List<Item> itemList = occupiedLockerList.stream()
-			.flatMap(locker -> itemRepository.findByLockerId(locker.getId()).stream())
-			.toList();
-
-		List<ItemOutlineDto> itemOutlineDtoList = itemList.stream()
-			.map(this::convertIntoItemOutlineDto)
-			.toList();
-
-		return ShowItemListResponse.from(itemOutlineDtoList);
-	}
+	// public ShowItemListResponse showItemList(long locationId) {
+	// 	Location location = locationRepository.findById(locationId)
+	// 		.orElseThrow(() -> new IllegalArgumentException("No Location found."));
+	//
+	// 	List<Locker> occupiedLockerList = location.getLockerList().stream()
+	// 		.filter(locker -> locker.getStatus() == LockerStatus.OCCUPIED).toList();
+	//
+	// 	List<Item> itemList = occupiedLockerList.stream()
+	// 		.flatMap(locker -> itemRepository.findByLockerId(locker.getId()).stream())
+	// 		.toList();
+	//
+	// 	List<ItemOutlineDto> itemOutlineDtoList = itemList.stream()
+	// 		.map(this::convertIntoItemOutlineDto)
+	// 		.toList();
+	//
+	// 	return ShowItemListResponse.from(itemOutlineDtoList);
+	// }
 
 	@Transactional
 	public AssignLockerResponse assignLocker(Long itemId, AssignLockerRequest assignLockerRequest) {
