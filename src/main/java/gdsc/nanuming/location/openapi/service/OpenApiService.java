@@ -110,7 +110,7 @@ public class OpenApiService {
 			row.getAsNumber(STCODE).longValue(),
 			row.getAsNumber(ZIPCODE).longValue(),
 			row.getAsString(CRNAME),
-			row.getAsString(CRADDR) + WHITE_SPACE,
+			row.getAsString(CRADDR),
 			Double.parseDouble(row.getAsString(LA)),
 			Double.parseDouble(row.getAsString(LO))
 		);
