@@ -13,6 +13,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -21,7 +22,7 @@ import net.minidev.json.parser.JSONParser;
 import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.location.openapi.dto.LocationApiDto;
 import gdsc.nanuming.location.openapi.event.OpenApiLoadedEvent;
-import gdsc.nanuming.location.service.LocationService;
+import gdsc.nanuming.location.repository.LocationBulkRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,12 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OpenApiService {
 
-	private final LocationService locationService;
+	private final LocationBulkRepository locationBulkRepository;
 	private final ApplicationEventPublisher eventPublisher;
 
 	@Value("${sm://CHILD_CARE_INFO_API_URL}")
 	private String childCareInfoApiUrl;
 
+	@Transactional
 	public void callChildCareInfoApi() {
 		log.info(">>> OpenApiService callChildCareInfoApi()");
 		try {
@@ -47,6 +49,8 @@ public class OpenApiService {
 					endIndex = totalCount;
 				}
 				JSONArray jsonArray = fetchData(i, endIndex);
+
+				log.info("{} ~ {} start", i, endIndex);
 				saveData(jsonArray);
 			}
 			this.eventPublisher.publishEvent(new OpenApiLoadedEvent(this));
@@ -63,7 +67,6 @@ public class OpenApiService {
 	}
 
 	public void saveData(JSONArray jsonArray) {
-		log.info(">>> OpenApiService saveData()");
 		List<Location> locationList = new ArrayList<>();
 		for (Object object : jsonArray) {
 			JSONObject row = (JSONObject)object;
@@ -77,7 +80,7 @@ public class OpenApiService {
 
 			locationList.add(locationApiDto.toEntity());
 		}
-		locationService.saveLocationList(locationList);
+		locationBulkRepository.bulkInsertLocation(locationList);
 	}
 
 	private String sendRequest(int startIndex, int endIndex) throws Exception {
