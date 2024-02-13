@@ -27,24 +27,24 @@ public class LockerBulkRepository {
 
 		final String sql = "INSERT INTO locker (location_id, size, status) VALUES (?, ?, ?)";
 
-		List<Object[]> batchData = new ArrayList<>();
+		List<Object[]> batchArgs = new ArrayList<>();
 
 		for (long i = start; i <= end; i++) {
 			for (int j = 0; j < SMALL_COUNT; j++) {
-				batchData.add(
-					new Object[] {i, LockerSize.SMALL.getSize(), LockerStatus.EMPTY.getStatus()});
+				batchArgs.add(
+					new Object[] {i, LockerSize.SMALL.toString(), LockerStatus.EMPTY.toString()});
 			}
 			for (int j = 0; j < MIDDLE_COUNT; j++) {
-				batchData.add(
-					new Object[] {i, LockerSize.MIDDLE.getSize(), LockerStatus.EMPTY.getStatus()});
+				batchArgs.add(
+					new Object[] {i, LockerSize.MIDDLE.toString(), LockerStatus.EMPTY.toString()});
 			}
 			for (int j = 0; j < BIG_COUNT; j++) {
-				batchData.add(
-					new Object[] {i, LockerSize.BIG.getSize(), LockerStatus.EMPTY.getStatus()});
+				batchArgs.add(
+					new Object[] {i, LockerSize.BIG.toString(), LockerStatus.EMPTY.toString()});
 			}
 		}
 
-		template.batchUpdate(sql, batchData);
+		template.batchUpdate(sql, batchArgs);
 		log.info("{} ~ {} finished", start, end);
 	}
 
