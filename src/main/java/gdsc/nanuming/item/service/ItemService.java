@@ -143,10 +143,10 @@ public class ItemService {
 		Long itemId = item.getId();
 		String mainImageUrl = item.getMainItemImage().getItemImageUrl();
 		String title = item.getTitle();
-		String locationDescription = item.getLocker().getLocation().getDescription();
+		String locationName = item.getLocker().getLocation().getName();
 		String categoryName = item.getCategory().getCategoryName().getName();
 		// TODO: need refactoring here or place `locationDescription` field in `Item`
-		return ItemOutlineDto.of(itemId, mainImageUrl, title, locationDescription, categoryName);
+		return ItemOutlineDto.of(itemId, mainImageUrl, title, locationName, categoryName);
 	}
 
 	private CustomUserDetails getCurrentUserDetails() {
