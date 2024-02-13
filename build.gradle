@@ -32,9 +32,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // jdbc for bulk insert
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-
     // google secret manager
     implementation 'com.google.cloud:spring-cloud-gcp-starter-secretmanager'
 
