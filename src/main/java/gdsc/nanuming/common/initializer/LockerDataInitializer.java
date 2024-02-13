@@ -27,9 +27,9 @@ public class LockerDataInitializer {
 
 	@EventListener
 	private void lockerDataInsert(OpenApiLoadedEvent event) {
-		List<Locker> lockerList = new ArrayList<>();
 		long count = locationRepository.count();
-		for (long i = 1; i <= count; i++) {
+		for (long i = 1; i <= count / 1000; i++) {
+			List<Locker> lockerList = new ArrayList<>();
 			Location location = locationRepository.findById(i).get();
 			for (int j = 0; j < SMALL_COUNT; j++) {
 				lockerList.add(Locker.of(location, SMALL));
@@ -40,8 +40,8 @@ public class LockerDataInitializer {
 			for (int j = 0; j < BIG_COUNT; j++) {
 				lockerList.add(Locker.of(location, BIG));
 			}
+			lockerRepository.saveAll(lockerList);
 		}
-		lockerRepository.saveAll(lockerList);
 	}
 
 }
