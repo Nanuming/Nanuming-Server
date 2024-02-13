@@ -1,46 +1,32 @@
 package gdsc.nanuming.common.initializer;
 
-import static gdsc.nanuming.locker.entity.LockerSize.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.location.openapi.event.OpenApiLoadedEvent;
 import gdsc.nanuming.location.repository.LocationRepository;
-import gdsc.nanuming.locker.entity.Locker;
-import gdsc.nanuming.locker.repository.LockerRepository;
+import gdsc.nanuming.locker.repository.LockerBulkRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class LockerDataInitializer {
 
-	private final LockerRepository lockerRepository;
+	private final LockerBulkRepository lockerBulkRepository;
 	private final LocationRepository locationRepository;
-	private static final int SMALL_COUNT = 3;
-	private static final int MIDDLE_COUNT = 2;
-	private static final int BIG_COUNT = 1;
+
+	private static final int BATCH_SIZE = 1000;
 
 	@EventListener
-	private void lockerDataInsert(OpenApiLoadedEvent event) {
-		long count = locationRepository.count();
-		for (long i = 1; i <= count; i++) {
-			List<Locker> lockerList = new ArrayList<>();
-			Location location = locationRepository.findById(i).get();
-			for (int j = 0; j < SMALL_COUNT; j++) {
-				lockerList.add(Locker.of(location, SMALL));
-			}
-			for (int j = 0; j < MIDDLE_COUNT; j++) {
-				lockerList.add(Locker.of(location, MIDDLE));
-			}
-			for (int j = 0; j < BIG_COUNT; j++) {
-				lockerList.add(Locker.of(location, BIG));
-			}
-			lockerRepository.saveAll(lockerList);
+	@Transactional
+	public void lockerDataInsert(OpenApiLoadedEvent event) {
+		long locationCount = locationRepository.count();
+		for (long i = 1; i <= locationCount; i += BATCH_SIZE) {
+			long end = Math.min(locationCount, i + BATCH_SIZE);
+			lockerBulkRepository.bulkInsertLocker(i, end);
 		}
 	}
 
