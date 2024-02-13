@@ -28,8 +28,9 @@ public class ItemController {
 
 	private final ItemService itemService;
 
-	@GetMapping("/{locationId}")
-	public BaseResponseWithData<ShowItemListResponse> showItemList(@PathVariable Long locationId) {
+	// TODO: need refactor here
+	@GetMapping("/list")
+	public BaseResponseWithData<ShowItemListResponse> showItemList() {
 		log.info(">>> Run ItemController showItemList()");
 		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.showItemList(locationId));
 	}
