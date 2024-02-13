@@ -15,7 +15,5 @@ spring:
       port: ${sm://REDIS_PORT}
       password: ${sm://REDIS_PASSWORD}
   jpa:
-    properties:
-      hibernate:
-        ddl-auto: create
-        format_sql: true
+    hibernate:
+      ddl-auto: create
