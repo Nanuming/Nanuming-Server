@@ -3,6 +3,7 @@ package gdsc.nanuming.locker.entity;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.location.entity.Location;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +38,9 @@ public class Locker {
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private LockerStatus status = LockerStatus.EMPTY;
 
+	@OneToOne(mappedBy = "locker")
+	private Item item;
+
 	@Builder
 	private Locker(Location location, LockerSize size) {
 		this.location = location;
@@ -47,5 +52,11 @@ public class Locker {
 			.location(location)
 			.size(size)
 			.build();
+	}
+
+	public Locker storeItem(Item item) {
+		this.item = item;
+		this.status = LockerStatus.OCCUPIED;
+		return this;
 	}
 }

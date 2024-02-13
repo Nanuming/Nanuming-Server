@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gdsc.nanuming.common.response.BaseResponseWithData;
 import gdsc.nanuming.item.dto.request.AddItemRequest;
+import gdsc.nanuming.item.dto.request.AssignLockerRequest;
 import gdsc.nanuming.item.dto.response.AddItemResponse;
+import gdsc.nanuming.item.dto.response.AssignLockerResponse;
+import gdsc.nanuming.item.dto.response.ShowItemDetailResponse;
 import gdsc.nanuming.item.dto.response.ShowItemListResponse;
 import gdsc.nanuming.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +28,30 @@ public class ItemController {
 
 	private final ItemService itemService;
 
-	@GetMapping("/{locationId}")
-	public BaseResponseWithData<ShowItemListResponse> showItemList(@PathVariable Long locationId) {
-		log.info(">>> Run ItemController showItemList()");
-		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.showItemList(locationId));
-	}
+	// TODO: need refactor here
+	// @GetMapping("/list")
+	// public BaseResponseWithData<ShowItemListResponse> showItemList() {
+	// 	log.info(">>> Run ItemController showItemList()");
+	// 	return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.showItemList());
+	// }
 
 	@PostMapping("/add")
 	public BaseResponseWithData<AddItemResponse> addTemporaryItem(@RequestBody AddItemRequest addItemRequest) {
 		log.info(">>> Run ItemController addTemporaryItem()");
 		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.addTemporaryItem(addItemRequest));
+	}
+
+	@GetMapping("/{itemId}")
+	public BaseResponseWithData<ShowItemDetailResponse> showItemDetail(@PathVariable Long itemId) {
+		log.info(">>> ItemController showItemDetail()");
+		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.showItemDetail(itemId));
+	}
+
+	@PostMapping("/{itemId}/assign")
+	public BaseResponseWithData<AssignLockerResponse> assignLocker(
+		@PathVariable Long itemId,
+		@RequestBody AssignLockerRequest assignLockerRequest) {
+		log.info(">>> ItemController assignLocker()");
+		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.assignLocker(itemId, assignLockerRequest));
 	}
 }

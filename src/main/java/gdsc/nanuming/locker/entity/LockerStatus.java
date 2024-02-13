@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum LockerStatus {
 
 	EMPTY("empty"),
-	CONTAINED("contained");
+	OCCUPIED("occupied");
 
 	private final String status;
 

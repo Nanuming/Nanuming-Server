@@ -1,8 +1,12 @@
 package gdsc.nanuming.item.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,17 +16,19 @@ import gdsc.nanuming.image.entity.ItemImage;
 import gdsc.nanuming.image.repository.ItemImageRepository;
 import gdsc.nanuming.item.dto.ItemOutlineDto;
 import gdsc.nanuming.item.dto.request.AddItemRequest;
+import gdsc.nanuming.item.dto.request.AssignLockerRequest;
 import gdsc.nanuming.item.dto.response.AddItemResponse;
-import gdsc.nanuming.item.dto.response.ShowItemListResponse;
+import gdsc.nanuming.item.dto.response.AssignLockerResponse;
+import gdsc.nanuming.item.dto.response.ShowItemDetailResponse;
 import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.item.repository.ItemRepository;
 import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.location.repository.LocationRepository;
 import gdsc.nanuming.locker.entity.Locker;
-import gdsc.nanuming.locker.entity.LockerStatus;
 import gdsc.nanuming.locker.repository.LockerRepository;
 import gdsc.nanuming.member.entity.Member;
 import gdsc.nanuming.member.repository.MemberRepository;
+import gdsc.nanuming.security.util.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +44,8 @@ public class ItemService {
 	private final CategoryRepository categoryRepository;
 	private final LocationRepository locationRepository;
 	private final ItemImageRepository itemImageRepository;
+
+	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
 	@Transactional
 	public AddItemResponse addTemporaryItem(AddItemRequest addItemRequest) {
@@ -69,32 +77,85 @@ public class ItemService {
 		return AddItemResponse.from(savedItem.getId());
 	}
 
-	public ShowItemListResponse showItemList(long locationId) {
-		Location location = locationRepository.findById(locationId)
-			.orElseThrow(() -> new IllegalArgumentException("No Location found."));
+	public ShowItemDetailResponse showItemDetail(Long itemId) {
+		log.info(">>> ItemService showItemDetail()");
 
-		List<Locker> containedLockerList = location.getLockerList().stream()
-			.filter(locker -> locker.getStatus() == LockerStatus.CONTAINED).toList();
+		Item item = itemRepository.findById(itemId)
+			.orElseThrow(() -> new IllegalArgumentException("No item found."));
 
-		List<Item> itemList = containedLockerList.stream()
-			.flatMap(locker -> itemRepository.findByLockerId(locker.getId()).stream())
+		List<String> itemImageUrlList = convertIntoItemImageUrlList(item.getItemImageList());
+		String category = item.getCategory().getCategoryName().getName();
+		String nickname = getCurrentUserDetails().getNickname();
+		Location location = item.getLocker().getLocation();
+		boolean isOwner = item.getSharer().getId().equals(getCurrentUserDetails().getId());
+		String createdAt = item.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
+		String updatedAt = item.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
+
+		return ShowItemDetailResponse.of(itemId, itemImageUrlList, category,
+			nickname, location.getName(),
+			item.getDescription(), isOwner, createdAt, updatedAt);
+	}
+
+	// public ShowItemListResponse showItemList(long locationId) {
+	// 	Location location = locationRepository.findById(locationId)
+	// 		.orElseThrow(() -> new IllegalArgumentException("No Location found."));
+	//
+	// 	List<Locker> occupiedLockerList = location.getLockerList().stream()
+	// 		.filter(locker -> locker.getStatus() == LockerStatus.OCCUPIED).toList();
+	//
+	// 	List<Item> itemList = occupiedLockerList.stream()
+	// 		.flatMap(locker -> itemRepository.findByLockerId(locker.getId()).stream())
+	// 		.toList();
+	//
+	// 	List<ItemOutlineDto> itemOutlineDtoList = itemList.stream()
+	// 		.map(this::convertIntoItemOutlineDto)
+	// 		.toList();
+	//
+	// 	return ShowItemListResponse.from(itemOutlineDtoList);
+	// }
+
+	@Transactional
+	public AssignLockerResponse assignLocker(Long itemId, AssignLockerRequest assignLockerRequest) {
+		log.info(">>> ItemService assignLocker()");
+
+		Item item = itemRepository.findById(itemId)
+			.orElseThrow(() -> new IllegalArgumentException("No item found."));
+
+		CustomUserDetails currentUserDetails = getCurrentUserDetails();
+		if (!item.getSharer().getId().equals(currentUserDetails.getId())) {
+			throw new IllegalStateException("Not permitted member.");
+		}
+
+		Locker locker = lockerRepository.findById(assignLockerRequest.getLockerId())
+			.orElseThrow(() -> new IllegalArgumentException("No locker found."));
+
+		item.assignLocker(locker);
+
+		return AssignLockerResponse.of(item.getId(), locker.getId());
+	}
+
+	private List<String> convertIntoItemImageUrlList(List<ItemImage> itemImageList) {
+		return itemImageList.stream()
+			.map(ItemImage::getItemImageUrl)
 			.toList();
-
-		List<ItemOutlineDto> itemOutlineDtoList = itemList.stream()
-			.map(this::convertIntoItemOutlineDto)
-			.toList();
-
-		return ShowItemListResponse.from(itemOutlineDtoList);
 	}
 
 	private ItemOutlineDto convertIntoItemOutlineDto(Item item) {
-
 		Long itemId = item.getId();
 		String mainImageUrl = item.getMainItemImage().getItemImageUrl();
 		String title = item.getTitle();
-		String locationDescription = item.getLocker().getLocation().getDescription();
+		String locationName = item.getLocker().getLocation().getName();
 		String categoryName = item.getCategory().getCategoryName().getName();
 		// TODO: need refactoring here or place `locationDescription` field in `Item`
-		return ItemOutlineDto.of(itemId, mainImageUrl, title, locationDescription, categoryName);
+		return ItemOutlineDto.of(itemId, mainImageUrl, title, locationName, categoryName);
+	}
+
+	private CustomUserDetails getCurrentUserDetails() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+			return (CustomUserDetails)authentication.getPrincipal();
+		} else {
+			throw new IllegalStateException("User is not authenticated.");
+		}
 	}
 }
