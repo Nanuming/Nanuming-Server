@@ -14,6 +14,7 @@ import gdsc.nanuming.item.dto.request.AddItemRequest;
 import gdsc.nanuming.item.dto.request.AssignLockerRequest;
 import gdsc.nanuming.item.dto.response.AddItemResponse;
 import gdsc.nanuming.item.dto.response.AssignLockerResponse;
+import gdsc.nanuming.item.dto.response.ShowItemDetailResponse;
 import gdsc.nanuming.item.dto.response.ShowItemListResponse;
 import gdsc.nanuming.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,12 @@ public class ItemController {
 	public BaseResponseWithData<AddItemResponse> addTemporaryItem(@RequestBody AddItemRequest addItemRequest) {
 		log.info(">>> Run ItemController addTemporaryItem()");
 		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.addTemporaryItem(addItemRequest));
+	}
+
+	@GetMapping("/{itemId}")
+	public BaseResponseWithData<ShowItemDetailResponse> showItemDetail(@PathVariable Long itemId) {
+		log.info(">>> ItemController showItemDetail()");
+		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.showItemDetail(itemId));
 	}
 
 	@PostMapping("/{itemId}/assign")
