@@ -23,7 +23,6 @@ public class LockerDataInitializer {
 	@EventListener
 	@Transactional
 	public void lockerDataInsert(OpenApiLoadedEvent event) {
-		log.info(">>> lockerDataInsert()");
 		long locationCount = locationRepository.count();
 		for (long i = 1; i <= locationCount; i += BATCH_SIZE) {
 			long end = Math.min(locationCount, i + BATCH_SIZE);
