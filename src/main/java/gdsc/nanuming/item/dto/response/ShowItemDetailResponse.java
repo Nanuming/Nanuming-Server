@@ -1,6 +1,5 @@
 package gdsc.nanuming.item.dto.response;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Builder;
@@ -16,12 +15,12 @@ public class ShowItemDetailResponse {
 	private String location;
 	private String description;
 	private boolean isOwner;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
+	private String createdAt;
+	private String updatedAt;
 
 	@Builder
 	private ShowItemDetailResponse(Long itemId, List<String> itemImageUrlList, String category, String nickname,
-		String location, String description, boolean isOwner, LocalDateTime createdAt, LocalDateTime updatedAt) {
+		String location, String description, boolean isOwner, String createdAt, String updatedAt) {
 		this.itemId = itemId;
 		this.itemImageUrlList = itemImageUrlList;
 		this.category = category;
@@ -34,8 +33,7 @@ public class ShowItemDetailResponse {
 	}
 
 	public static ShowItemDetailResponse of(Long itemId, List<String> itemImageUrlList, String category,
-		String nickname, String location, String description, boolean isOwner, LocalDateTime createdAt,
-		LocalDateTime updatedAt) {
+		String nickname, String location, String description, boolean isOwner, String createdAt, String updatedAt) {
 		return ShowItemDetailResponse.builder()
 			.itemId(itemId)
 			.itemImageUrlList(itemImageUrlList)
