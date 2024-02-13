@@ -29,11 +29,11 @@ public class ItemController {
 	private final ItemService itemService;
 
 	// TODO: need refactor here
-	@GetMapping("/list")
-	public BaseResponseWithData<ShowItemListResponse> showItemList() {
-		log.info(">>> Run ItemController showItemList()");
-		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.showItemList(locationId));
-	}
+	// @GetMapping("/list")
+	// public BaseResponseWithData<ShowItemListResponse> showItemList() {
+	// 	log.info(">>> Run ItemController showItemList()");
+	// 	return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.showItemList());
+	// }
 
 	@PostMapping("/add")
 	public BaseResponseWithData<AddItemResponse> addTemporaryItem(@RequestBody AddItemRequest addItemRequest) {
