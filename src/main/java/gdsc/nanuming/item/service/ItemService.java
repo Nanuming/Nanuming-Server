@@ -1,6 +1,7 @@
 package gdsc.nanuming.item.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +20,11 @@ import gdsc.nanuming.item.dto.request.AssignLockerRequest;
 import gdsc.nanuming.item.dto.response.AddItemResponse;
 import gdsc.nanuming.item.dto.response.AssignLockerResponse;
 import gdsc.nanuming.item.dto.response.ShowItemDetailResponse;
-import gdsc.nanuming.item.dto.response.ShowItemListResponse;
 import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.item.repository.ItemRepository;
 import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.location.repository.LocationRepository;
 import gdsc.nanuming.locker.entity.Locker;
-import gdsc.nanuming.locker.entity.LockerStatus;
 import gdsc.nanuming.locker.repository.LockerRepository;
 import gdsc.nanuming.member.entity.Member;
 import gdsc.nanuming.member.repository.MemberRepository;
@@ -45,6 +44,8 @@ public class ItemService {
 	private final CategoryRepository categoryRepository;
 	private final LocationRepository locationRepository;
 	private final ItemImageRepository itemImageRepository;
+
+	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
 	@Transactional
 	public AddItemResponse addTemporaryItem(AddItemRequest addItemRequest) {
@@ -87,8 +88,8 @@ public class ItemService {
 		String nickname = getCurrentUserDetails().getNickname();
 		Location location = item.getLocker().getLocation();
 		boolean isOwner = item.getSharer().getId().equals(getCurrentUserDetails().getId());
-		LocalDateTime createdAt = item.getCreatedAt();
-		LocalDateTime updatedAt = item.getUpdatedAt();
+		String createdAt = item.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
+		String updatedAt = item.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
 
 		return ShowItemDetailResponse.of(itemId, itemImageUrlList, category,
 			nickname, location.getName(),
