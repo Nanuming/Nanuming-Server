@@ -89,4 +89,9 @@ public class Item extends BaseEntity {
 			this.itemImageList.add(itemImage.addItem(this));
 		});
 	}
+
+	public void assignLocker(Locker locker) {
+		this.saveStatus = SaveStatus.SAVED;
+		this.locker = locker.storeItem(this);
+	}
 }

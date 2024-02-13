@@ -1,6 +1,6 @@
 package gdsc.nanuming.location.openapi.service;
 
-import static gdsc.nanuming.location.openapi.OpenApiConstant.*;
+import static gdsc.nanuming.location.openapi.constant.OpenApiConstant.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import net.minidev.json.JSONArray;
@@ -19,6 +20,7 @@ import net.minidev.json.parser.JSONParser;
 
 import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.location.openapi.dto.LocationApiDto;
+import gdsc.nanuming.location.openapi.event.OpenApiLoadedEvent;
 import gdsc.nanuming.location.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OpenApiService {
 
 	private final LocationService locationService;
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Value("${sm://CHILD_CARE_INFO_API_URL}")
 	private String childCareInfoApiUrl;
@@ -46,6 +49,7 @@ public class OpenApiService {
 				JSONArray jsonArray = fetchData(i, endIndex);
 				saveData(jsonArray);
 			}
+			this.eventPublisher.publishEvent(new OpenApiLoadedEvent(this));
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}
@@ -70,7 +74,6 @@ public class OpenApiService {
 			}
 
 			LocationApiDto locationApiDto = convertIntoLocationApiDto(row);
-			log.info(">>> OpenApiService saveData() locationApiDto: {}", locationApiDto);
 
 			locationList.add(locationApiDto.toEntity());
 		}
@@ -107,7 +110,7 @@ public class OpenApiService {
 			row.getAsNumber(STCODE).longValue(),
 			row.getAsNumber(ZIPCODE).longValue(),
 			row.getAsString(CRNAME),
-			row.getAsString(CRADDR) + WHITE_SPACE,
+			row.getAsString(CRADDR),
 			Double.parseDouble(row.getAsString(LA)),
 			Double.parseDouble(row.getAsString(LO))
 		);

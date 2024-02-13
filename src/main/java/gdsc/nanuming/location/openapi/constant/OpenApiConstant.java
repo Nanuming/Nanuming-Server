@@ -1,4 +1,4 @@
-package gdsc.nanuming.location.openapi;
+package gdsc.nanuming.location.openapi.constant;
 
 public final class OpenApiConstant {
 

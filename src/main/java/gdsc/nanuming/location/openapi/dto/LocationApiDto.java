@@ -38,13 +38,10 @@ public class LocationApiDto {
 
 	public Location toEntity() {
 		return Location.of(
-			createDescription(),
+			this.address,
+			this.name,
 			this.latitude,
 			this.longitude
 		);
-	}
-
-	private String createDescription() {
-		return this.address + this.name;
 	}
 }

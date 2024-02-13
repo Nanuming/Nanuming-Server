@@ -36,7 +36,8 @@ public class LocationService {
 		List<Location> locations = locationRepository.findLocations(polygon);
 		for (Location location : locations) {
 			log.info("location.getId: {}", location.getId());
-			log.info("location.getDescription(): {}", location.getDescription());
+			log.info("location.getAddress(): {}", location.getAddress());
+			log.info("location.getName(): {}", location.getName());
 		}
 		return null;
 	}
@@ -64,7 +65,8 @@ public class LocationService {
 
 		for (Location location : locations) {
 			log.info("location.getId: {}", location.getId());
-			log.info("location.getDescription: {}", location.getDescription());
+			log.info("location.getAddress: {}", location.getAddress());
+			log.info("location.getName: {}", location.getName());
 		}
 		return null;
 	}
