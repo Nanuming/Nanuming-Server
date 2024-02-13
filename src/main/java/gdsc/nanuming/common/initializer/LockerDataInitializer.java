@@ -21,14 +21,14 @@ public class LockerDataInitializer {
 
 	private final LockerRepository lockerRepository;
 	private final LocationRepository locationRepository;
-	private static final int SMALL_COUNT = 6;
-	private static final int MIDDLE_COUNT = 4;
-	private static final int BIG_COUNT = 2;
+	private static final int SMALL_COUNT = 3;
+	private static final int MIDDLE_COUNT = 2;
+	private static final int BIG_COUNT = 1;
 
 	@EventListener
 	private void lockerDataInsert(OpenApiLoadedEvent event) {
 		long count = locationRepository.count();
-		for (long i = 1; i <= count / 1000; i++) {
+		for (long i = 1; i <= count; i++) {
 			List<Locker> lockerList = new ArrayList<>();
 			Location location = locationRepository.findById(i).get();
 			for (int j = 0; j < SMALL_COUNT; j++) {
