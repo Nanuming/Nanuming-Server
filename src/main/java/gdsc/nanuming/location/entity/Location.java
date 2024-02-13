@@ -58,4 +58,8 @@ public class Location {
 			.longitude(longitude)
 			.build();
 	}
+
+	public String convertPointToText() {
+		return String.format("POINT(%s %s)", this.longitude, this.latitude);
+	}
 }
