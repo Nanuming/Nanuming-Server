@@ -6,8 +6,7 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.PrecisionModel;
 
-import gdsc.nanuming.common.UserMapPolygon;
-import gdsc.nanuming.location.dto.request.ShowNearLocationListRequest;
+import gdsc.nanuming.location.dto.request.NearLocationAndItemRequest;
 
 public class GeometryUtil {
 
@@ -17,12 +16,12 @@ public class GeometryUtil {
 		return GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude));
 	}
 
-	public static Polygon createPolygon(UserMapPolygon userMapPolygon) {
+	public static Polygon createPolygon(NearLocationAndItemRequest request) {
 
-		double latitude = userMapPolygon.getLatitude();
-		double longitude = userMapPolygon.getLongitude();
-		double latitudeDelta = userMapPolygon.getLatitudeDelta();
-		double longitudeDelta = userMapPolygon.getLongitudeDelta();
+		double latitude = request.getLatitude();
+		double longitude = request.getLongitude();
+		double latitudeDelta = request.getLatitudeDelta();
+		double longitudeDelta = request.getLongitudeDelta();
 
 		double minLatitude = latitude - latitudeDelta;
 		double maxLatitude = latitude + latitudeDelta;
