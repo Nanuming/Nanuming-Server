@@ -60,6 +60,6 @@ public class Location {
 	}
 
 	public String convertPointToText() {
-		return String.format("POINT(%s %s)", this.longitude, this.latitude);
+		return String.format("POINT(%s %s)", this.latitude, this.longitude);
 	}
 }
