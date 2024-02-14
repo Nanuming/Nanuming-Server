@@ -1,4 +1,65 @@
 package gdsc.nanuming.image.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+
+import gdsc.nanuming.image.entity.ItemImage;
+import gdsc.nanuming.image.repository.ItemImageRepository;
+import gdsc.nanuming.item.entity.Item;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
 public class ImageService {
+
+	@Value("${sm://BUCKET_NAME}")
+	private String bucketName;
+
+	private final Storage storage;
+	private final ItemImageRepository itemImageRepository;
+
+	private final static String GOOGLE_STORAGE = "https://storage.googleapis.com/";
+	private final static String SLASH = "/";
+
+	public List<ItemImage> uploadItemImage(List<MultipartFile> multipartFileList, Item temporarySavedItem) {
+
+		List<ItemImage> itemImageList = new ArrayList<>();
+		for (MultipartFile itemImage : multipartFileList) {
+			try {
+				String uuid = UUID.randomUUID().toString();
+				String extension = itemImage.getContentType();
+				String blobName = temporarySavedItem.getId() + "/" + uuid + extension;
+
+				BlobId blobId = BlobId.of(bucketName, blobName);
+				BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
+					.setContentType(extension)
+					.build();
+
+				storage.create(blobInfo, itemImage.getBytes());
+
+				String uploadedImageUrl = GOOGLE_STORAGE + bucketName + SLASH + blobName;
+
+				ItemImage savedItemImage = itemImageRepository.save(ItemImage.from(uploadedImageUrl));
+
+				itemImageList.add(savedItemImage);
+			} catch (IOException e) {
+				// TODO: need custom exception handler here
+				throw new RuntimeException("File upload Failure");
+			}
+		}
+		return itemImageList;
+	}
+
 }
