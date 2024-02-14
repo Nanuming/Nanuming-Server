@@ -32,6 +32,7 @@ public class ImageService {
 
 	private final static String GOOGLE_STORAGE = "https://storage.googleapis.com/";
 	private final static String SLASH = "/";
+	private final static String POINT = ".";
 
 	public List<ItemImage> uploadItemImage(List<MultipartFile> multipartFileList, Item temporarySavedItem) {
 
@@ -40,6 +41,7 @@ public class ImageService {
 			try {
 				String uuid = UUID.randomUUID().toString();
 				String extension = itemImage.getContentType();
+				extension = extension.replace(SLASH, POINT);
 				String blobName = temporarySavedItem.getId() + "/" + uuid + extension;
 
 				BlobId blobId = BlobId.of(bucketName, blobName);
