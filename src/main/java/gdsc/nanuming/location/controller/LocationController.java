@@ -30,13 +30,4 @@ public class LocationController {
 			locationService.showNearLocationListAndItemCount(showNearLocationListRequest));
 	}
 
-	@PostMapping("/distance")
-	public BaseResponseWithData<ShowNearLocationListResponse> showNearLocationListWithDistanceMeter(
-		@RequestBody ShowNearLocationListRequestWithDistanceMeter showNearLocationListRequestWithDistanceMeter) {
-		log.info(">>> LocationController showNearLocationListWithDistanceMeter()");
-		return BaseResponseWithData.of(CommonCode.RESPONSE_SUCCESS,
-			locationService.showNearLocationListWithDistanceMeterAndItemCount(
-				showNearLocationListRequestWithDistanceMeter));
-	}
-
 }
