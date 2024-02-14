@@ -1,6 +1,7 @@
 package gdsc.nanuming.item.service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
@@ -114,14 +115,19 @@ public class ItemService {
 			.toList();
 	}
 
-	private ItemOutlineDto convertIntoItemOutlineDto(Item item) {
-		Long itemId = item.getId();
-		String mainImageUrl = item.getMainItemImage().getItemImageUrl();
-		String title = item.getTitle();
-		String locationName = item.getLocker().getLocation().getName();
-		String categoryName = item.getCategory().getCategoryName().getName();
-		// TODO: need refactoring here or place `locationDescription` field in `Item`
-		return ItemOutlineDto.of(itemId, mainImageUrl, title, locationName, categoryName);
+	public List<ItemOutlineDto> convertIntoItemOutlineDtoList(List<Locker> occupiedLockerList, Location location) {
+		List<ItemOutlineDto> itemOutlineDtoList = new ArrayList<>();
+		for (Locker locker : occupiedLockerList) {
+			Item item = locker.getItem();
+			itemOutlineDtoList.add(ItemOutlineDto.of(item.getId(),
+				item.getMainItemImage().getItemImageUrl(),
+				item.getTitle(),
+				location.getName(),
+				String.valueOf(item.getCategory().getCategoryName()
+				))
+			);
+		}
+		return itemOutlineDtoList;
 	}
 
 	private CustomUserDetails getCurrentUserDetails() {
