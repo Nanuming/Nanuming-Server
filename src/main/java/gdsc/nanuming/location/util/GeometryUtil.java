@@ -6,7 +6,7 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.PrecisionModel;
 
-import gdsc.nanuming.location.dto.request.ShowNearLocationListRequest;
+import gdsc.nanuming.location.dto.request.NearLocationAndItemRequest;
 
 public class GeometryUtil {
 
@@ -16,7 +16,7 @@ public class GeometryUtil {
 		return GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude));
 	}
 
-	public static Polygon createPolygon(ShowNearLocationListRequest request) {
+	public static Polygon createPolygon(NearLocationAndItemRequest request) {
 
 		double latitude = request.getLatitude();
 		double longitude = request.getLongitude();

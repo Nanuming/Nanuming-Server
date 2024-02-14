@@ -1,6 +1,7 @@
 package gdsc.nanuming.item.service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import gdsc.nanuming.category.entity.Category;
 import gdsc.nanuming.category.repository.CategoryRepository;
 import gdsc.nanuming.image.entity.ItemImage;
-import gdsc.nanuming.image.repository.ItemImageRepository;
 import gdsc.nanuming.image.service.ImageService;
 import gdsc.nanuming.item.dto.ItemOutlineDto;
 import gdsc.nanuming.item.dto.request.AddItemRequest;
@@ -22,7 +22,6 @@ import gdsc.nanuming.item.dto.response.ShowItemDetailResponse;
 import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.item.repository.ItemRepository;
 import gdsc.nanuming.location.entity.Location;
-import gdsc.nanuming.location.repository.LocationRepository;
 import gdsc.nanuming.locker.entity.Locker;
 import gdsc.nanuming.locker.repository.LockerRepository;
 import gdsc.nanuming.member.entity.Member;
@@ -41,8 +40,6 @@ public class ItemService {
 	private final MemberRepository memberRepository;
 	private final LockerRepository lockerRepository;
 	private final CategoryRepository categoryRepository;
-	private final LocationRepository locationRepository;
-	private final ItemImageRepository itemImageRepository;
 
 	private final ImageService imageService;
 
@@ -92,24 +89,6 @@ public class ItemService {
 			item.getDescription(), isOwner, createdAt, updatedAt);
 	}
 
-	// public ShowItemListResponse showItemList(long locationId) {
-	// 	Location location = locationRepository.findById(locationId)
-	// 		.orElseThrow(() -> new IllegalArgumentException("No Location found."));
-	//
-	// 	List<Locker> occupiedLockerList = location.getLockerList().stream()
-	// 		.filter(locker -> locker.getStatus() == LockerStatus.OCCUPIED).toList();
-	//
-	// 	List<Item> itemList = occupiedLockerList.stream()
-	// 		.flatMap(locker -> itemRepository.findByLockerId(locker.getId()).stream())
-	// 		.toList();
-	//
-	// 	List<ItemOutlineDto> itemOutlineDtoList = itemList.stream()
-	// 		.map(this::convertIntoItemOutlineDto)
-	// 		.toList();
-	//
-	// 	return ShowItemListResponse.from(itemOutlineDtoList);
-	// }
-
 	@Transactional
 	public AssignLockerResponse assignLocker(Long itemId, AssignLockerRequest assignLockerRequest) {
 		log.info(">>> ItemService assignLocker()");
@@ -136,14 +115,19 @@ public class ItemService {
 			.toList();
 	}
 
-	private ItemOutlineDto convertIntoItemOutlineDto(Item item) {
-		Long itemId = item.getId();
-		String mainImageUrl = item.getMainItemImage().getItemImageUrl();
-		String title = item.getTitle();
-		String locationName = item.getLocker().getLocation().getName();
-		String categoryName = item.getCategory().getCategoryName().getName();
-		// TODO: need refactoring here or place `locationDescription` field in `Item`
-		return ItemOutlineDto.of(itemId, mainImageUrl, title, locationName, categoryName);
+	public List<ItemOutlineDto> convertIntoItemOutlineDtoList(List<Locker> occupiedLockerList, Location location) {
+		List<ItemOutlineDto> itemOutlineDtoList = new ArrayList<>();
+		for (Locker locker : occupiedLockerList) {
+			Item item = locker.getItem();
+			itemOutlineDtoList.add(ItemOutlineDto.of(item.getId(),
+				item.getMainItemImage().getItemImageUrl(),
+				item.getTitle(),
+				location.getName(),
+				String.valueOf(item.getCategory().getCategoryName()
+				))
+			);
+		}
+		return itemOutlineDtoList;
 	}
 
 	private CustomUserDetails getCurrentUserDetails() {

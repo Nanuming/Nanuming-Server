@@ -15,7 +15,6 @@ import gdsc.nanuming.item.dto.request.AssignLockerRequest;
 import gdsc.nanuming.item.dto.response.AddItemResponse;
 import gdsc.nanuming.item.dto.response.AssignLockerResponse;
 import gdsc.nanuming.item.dto.response.ShowItemDetailResponse;
-import gdsc.nanuming.item.dto.response.ShowItemListResponse;
 import gdsc.nanuming.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ItemController {
 
 	private final ItemService itemService;
-
-	// TODO: need refactor here
-	// @GetMapping("/list")
-	// public BaseResponseWithData<ShowItemListResponse> showItemList() {
-	// 	log.info(">>> Run ItemController showItemList()");
-	// 	return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.showItemList());
-	// }
 
 	@PostMapping("/add")
 	public BaseResponseWithData<AddItemResponse> addTemporaryItem(AddItemRequest addItemRequest) {

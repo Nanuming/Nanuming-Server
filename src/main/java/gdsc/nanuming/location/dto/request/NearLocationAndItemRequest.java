@@ -3,9 +3,11 @@ package gdsc.nanuming.location.dto.request;
 import lombok.Getter;
 
 @Getter
-public class ShowNearLocationListRequestWithDistanceMeter {
+public class NearLocationAndItemRequest {
 
 	private double latitude;
 	private double longitude;
-	private double radiusInKm;
+	private double latitudeDelta;
+	private double longitudeDelta;
+
 }

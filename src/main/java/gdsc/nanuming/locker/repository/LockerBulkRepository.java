@@ -18,9 +18,9 @@ public class LockerBulkRepository {
 
 	private final JdbcTemplate template;
 
-	private static final int SMALL_COUNT = 6;
-	private static final int MIDDLE_COUNT = 4;
-	private static final int BIG_COUNT = 2;
+	private static final int SMALL_COUNT = 3;
+	private static final int MIDDLE_COUNT = 2;
+	private static final int BIG_COUNT = 1;
 
 	public void bulkInsertLocker(long start, long end) {
 		log.info("{} ~ {} start", start, end);

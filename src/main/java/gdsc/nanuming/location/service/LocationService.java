@@ -1,19 +1,22 @@
 package gdsc.nanuming.location.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gdsc.nanuming.location.dto.request.ShowNearLocationListRequest;
-import gdsc.nanuming.location.dto.request.ShowNearLocationListRequestWithDistanceMeter;
-import gdsc.nanuming.location.dto.response.ShowNearLocationListResponse;
+import gdsc.nanuming.item.dto.ItemOutlineDto;
+import gdsc.nanuming.item.service.ItemService;
+import gdsc.nanuming.location.dto.LocationWithItemOutlineListDto;
+import gdsc.nanuming.location.dto.request.NearLocationAndItemRequest;
+import gdsc.nanuming.location.dto.response.NearLocationAndItemResponse;
 import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.location.repository.LocationRepository;
 import gdsc.nanuming.location.util.GeometryUtil;
+import gdsc.nanuming.locker.entity.Locker;
+import gdsc.nanuming.locker.service.LockerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,51 +26,32 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional(readOnly = true)
 public class LocationService {
 
+	private final ItemService itemService;
+	private final LockerService lockerService;
+
 	private final LocationRepository locationRepository;
 
-	@Transactional
-	public void saveLocationList(List<Location> locationList) {
-		locationRepository.saveAll(locationList);
-	}
-
-	public ShowNearLocationListResponse showNearLocationListAndItemCount(ShowNearLocationListRequest request) {
+	public NearLocationAndItemResponse getNearLocationAndItemList(NearLocationAndItemRequest request) {
 		Polygon polygon = GeometryUtil.createPolygon(request);
-		log.info("polygon: {}", polygon);
-		List<Location> locations = locationRepository.findLocations(polygon);
-		for (Location location : locations) {
-			log.info("location.getId: {}", location.getId());
-			log.info("location.getAddress(): {}", location.getAddress());
-			log.info("location.getName(): {}", location.getName());
+		List<Location> locationList = locationRepository.findLocationList(polygon);
+		log.info("locationList.size(): {}", locationList.size());
+
+		List<LocationWithItemOutlineListDto> locationWithItemOutlineListDtoList = new ArrayList<>();
+
+		for (Location location : locationList) {
+
+			List<Locker> occupiedLockerList = lockerService.occupiedLockerList(location.getId());
+			List<ItemOutlineDto> itemOutlineDtoList = itemService.convertIntoItemOutlineDtoList(occupiedLockerList,
+				location);
+
+			locationWithItemOutlineListDtoList.add(LocationWithItemOutlineListDto.of(
+				location.getId(),
+				location.getLatitude(),
+				location.getLongitude(),
+				itemOutlineDtoList));
 		}
-		return null;
+
+		return NearLocationAndItemResponse.from(locationWithItemOutlineListDtoList);
 	}
 
-	public ShowNearLocationListResponse showNearLocationListWithDistanceMeterAndItemCount(
-		ShowNearLocationListRequestWithDistanceMeter request) {
-
-		double halfSideLength = request.getRadiusInKm() / (111.32 * Math.cos(Math.toRadians(request.getLatitude())));
-		Coordinate[] coordinates = new Coordinate[5];
-		coordinates[0] = new Coordinate(request.getLongitude() - halfSideLength,
-			request.getLatitude() - halfSideLength);
-		coordinates[1] = new Coordinate(request.getLongitude() + halfSideLength,
-			request.getLatitude() - halfSideLength);
-		coordinates[2] = new Coordinate(request.getLongitude() + halfSideLength,
-			request.getLatitude() + halfSideLength);
-		coordinates[3] = new Coordinate(request.getLongitude() - halfSideLength,
-			request.getLatitude() + halfSideLength);
-		coordinates[4] = coordinates[0];
-
-		Polygon square = GeometryUtil.createPolygon(coordinates);
-
-		Point point = GeometryUtil.createPoint(request.getLongitude(), request.getLatitude());
-		Long distanceMeter = (long)(request.getRadiusInKm() * 1000);
-		List<Location> locations = locationRepository.findLocationsByDistanceMeter(square, point, distanceMeter);
-
-		for (Location location : locations) {
-			log.info("location.getId: {}", location.getId());
-			log.info("location.getAddress: {}", location.getAddress());
-			log.info("location.getName: {}", location.getName());
-		}
-		return null;
-	}
 }

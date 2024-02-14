@@ -19,7 +19,7 @@ public class LocationBulkRepository {
 
 	public void bulkInsertLocation(List<Location> locationList) {
 
-		final String sql = "INSERT INTO location (latitude, longitude, address, name, point) VALUES (?, ?, ?, ?, ST_PointFromText(?))";
+		final String sql = "INSERT INTO location (latitude, longitude, address, name, point) VALUES (?, ?, ?, ?, ST_PointFromText(?, 4326))";
 
 		List<Object[]> batchArgs = new ArrayList<>();
 
