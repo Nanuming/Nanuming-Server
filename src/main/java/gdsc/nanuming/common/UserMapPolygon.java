@@ -1,4 +1,4 @@
-package gdsc.nanuming.location.dto;
+package gdsc.nanuming.common;
 
 public interface UserMapPolygon {
 }
