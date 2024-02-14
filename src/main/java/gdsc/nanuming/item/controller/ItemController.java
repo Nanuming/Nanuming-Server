@@ -36,7 +36,7 @@ public class ItemController {
 	// }
 
 	@PostMapping("/add")
-	public BaseResponseWithData<AddItemResponse> addTemporaryItem(@RequestBody AddItemRequest addItemRequest) {
+	public BaseResponseWithData<AddItemResponse> addTemporaryItem(AddItemRequest addItemRequest) {
 		log.info(">>> Run ItemController addTemporaryItem()");
 		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.addTemporaryItem(addItemRequest));
 	}

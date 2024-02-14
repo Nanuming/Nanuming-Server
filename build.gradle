@@ -35,6 +35,10 @@ dependencies {
     // google secret manager
     implementation 'com.google.cloud:spring-cloud-gcp-starter-secretmanager'
 
+    // google cloud storage
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
+
     // google oauth2 client library
     implementation 'com.google.auth:google-auth-library-oauth2-http:1.16.0'
 
