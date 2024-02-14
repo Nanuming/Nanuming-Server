@@ -2,6 +2,8 @@ package gdsc.nanuming.item.dto.request;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import gdsc.nanuming.category.entity.Category;
 import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.member.entity.Member;
@@ -14,7 +16,7 @@ public class AddItemRequest {
 	private Long categoryId;
 	private String title;
 	private String description;
-	private List<String> imageList;
+	private List<MultipartFile> imageList;
 
 	public Item toEntity(Member member, Category category) {
 		return Item.of(
