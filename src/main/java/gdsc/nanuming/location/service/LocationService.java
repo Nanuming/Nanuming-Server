@@ -25,11 +25,6 @@ public class LocationService {
 
 	private final LocationRepository locationRepository;
 
-	@Transactional
-	public void saveLocationList(List<Location> locationList) {
-		locationRepository.saveAll(locationList);
-	}
-
 	public ShowNearLocationListResponse showNearLocationListAndItemCount(ShowNearLocationListRequest request) {
 		Polygon polygon = GeometryUtil.createPolygon(request);
 		log.info("polygon: {}", polygon);
