@@ -17,4 +17,10 @@ public class LockerService {
 
 	private final LockerRepository lockerRepository;
 
+	public List<Locker> occupiedLockerList(Long locationId) {
+
+		return lockerRepository.findByLocationIdAndStatus(locationId,
+			LockerStatus.OCCUPIED);
+	}
+
 }
