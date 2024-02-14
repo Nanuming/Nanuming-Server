@@ -1,8 +1,6 @@
 package gdsc.nanuming.item.service;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
@@ -14,6 +12,7 @@ import gdsc.nanuming.category.entity.Category;
 import gdsc.nanuming.category.repository.CategoryRepository;
 import gdsc.nanuming.image.entity.ItemImage;
 import gdsc.nanuming.image.repository.ItemImageRepository;
+import gdsc.nanuming.image.service.ImageService;
 import gdsc.nanuming.item.dto.ItemOutlineDto;
 import gdsc.nanuming.item.dto.request.AddItemRequest;
 import gdsc.nanuming.item.dto.request.AssignLockerRequest;
@@ -45,7 +44,10 @@ public class ItemService {
 	private final LocationRepository locationRepository;
 	private final ItemImageRepository itemImageRepository;
 
+	private final ImageService imageService;
+
 	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	private static final int THUMBNAIL_INDEX = 0;
 
 	@Transactional
 	public AddItemResponse addTemporaryItem(AddItemRequest addItemRequest) {
@@ -55,23 +57,17 @@ public class ItemService {
 			.orElseThrow(() -> new IllegalArgumentException("No member found."));
 		log.info(">>> ItemService addItem() sharer: {}", sharer);
 
-		List<ItemImage> itemImageList = new ArrayList<>();
-		for (String itemImageUrl : addItemRequest.getImageList()) {
-			ItemImage savedItemImage = itemImageRepository.save(ItemImage.from(itemImageUrl));
-			itemImageList.add(savedItemImage);
-		}
-
 		Category category = categoryRepository.findById(addItemRequest.getCategoryId())
 			.orElseThrow(() -> new IllegalArgumentException("No category found."));
-		log.info(">>> category: {}", category.getCategoryName());
+		log.info(">>> category: {}", category.toString());
 
 		Item newTemporaryItem = addItemRequest.toEntity(sharer, category);
 		log.info(">>> temporary newTemporaryItem: {}", newTemporaryItem);
 
-		newTemporaryItem.addItemImageList(itemImageList);
-		// TODO: remove magic number
-		newTemporaryItem.addMainItemImage(itemImageList.get(0));
-		log.info(">>> newTemporaryItem creation complete: {}", newTemporaryItem);
+		Item temporarySavedItem = itemRepository.save(newTemporaryItem);
+		List<ItemImage> itemImageList = imageService.uploadItemImage(addItemRequest.getImageList(), temporarySavedItem);
+		temporarySavedItem.addItemImageList(itemImageList);
+		temporarySavedItem.addMainItemImage(itemImageList.get(THUMBNAIL_INDEX));
 
 		Item savedItem = itemRepository.save(newTemporaryItem);
 		return AddItemResponse.from(savedItem.getId());
