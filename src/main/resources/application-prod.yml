@@ -16,8 +16,8 @@ spring:
       password: ${sm://REDIS_PASSWORD}
   servlet:
     multipart:
-      max-file-size: 3MB
-      max-request-size: 20MB
+      max-file-size: 2MB
+      max-request-size: 30MB
   jpa:
     hibernate:
       ddl-auto: create
