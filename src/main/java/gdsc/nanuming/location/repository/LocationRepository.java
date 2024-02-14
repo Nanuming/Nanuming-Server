@@ -18,8 +18,8 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 		FROM location
 		WHERE ST_CONTAINS(:area, location.point)""",
 		nativeQuery = true)
-	List<Location> findLocations(@Param("area") Polygon area);
-
+	List<Location> findLocationList(@Param("area") Polygon area);
+	
 	@Query(value = """
 		SELECT
 		location.*

@@ -9,26 +9,26 @@ public class ItemOutlineDto {
 	private Long itemId;
 	private String mainItemImageUrl;
 	private String title;
-	private String locationDescription;
+	private String locationName;
 	private String categoryName;
 
 	@Builder
-	private ItemOutlineDto(Long itemId, String mainItemImageUrl, String title, String locationDescription,
+	private ItemOutlineDto(Long itemId, String mainItemImageUrl, String title, String locationName,
 		String categoryName) {
 		this.itemId = itemId;
 		this.mainItemImageUrl = mainItemImageUrl;
 		this.title = title;
-		this.locationDescription = locationDescription;
+		this.locationName = locationName;
 		this.categoryName = categoryName;
 	}
 
-	public static ItemOutlineDto of(Long itemId, String mainItemImageUrl, String title, String locationDescription,
+	public static ItemOutlineDto of(Long itemId, String mainItemImageUrl, String title, String locationName,
 		String categoryName) {
 		return ItemOutlineDto.builder()
 			.itemId(itemId)
 			.mainItemImageUrl(mainItemImageUrl)
 			.title(title)
-			.locationDescription(locationDescription)
+			.locationName(locationName)
 			.categoryName(categoryName)
 			.build();
 	}
