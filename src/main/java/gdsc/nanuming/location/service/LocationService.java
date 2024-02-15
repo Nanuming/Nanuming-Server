@@ -45,7 +45,7 @@ public class LocationService {
 		List<ItemOutlineDto> itemOutlineDtoList = new ArrayList<>();
 
 		for (LocationInfoDto locationInfoDto : locationInfoDtoList) {
-			List<Locker> occupiedLockerList = lockerService.occupiedLockerList(locationInfoDto.getLocationId());
+			List<Locker> occupiedLockerList = lockerService.getOccupiedLockerList(locationInfoDto.getLocationId());
 			for (Locker locker : occupiedLockerList) {
 				if (locker.getItem().getItemStatus().equals(ItemStatus.AVAILABLE)) {
 					Item item = locker.getItem();
