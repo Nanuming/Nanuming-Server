@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gdsc.nanuming.locker.entity.Locker;
+import gdsc.nanuming.locker.entity.LockerStatus;
 import gdsc.nanuming.locker.repository.LockerRepository;
 import gdsc.nanuming.member.entity.Member;
 import gdsc.nanuming.member.repository.MemberRepository;
@@ -30,8 +31,10 @@ public class ReservationService {
 
 	@Transactional
 	public void changeStatusToExpired(Long memberId, Long lockerId) {
-		Reservation reservation = reservationRepository.findByMemberIdAndLockerId(memberId, lockerId)
-			.orElseThrow(() -> new IllegalArgumentException("No Reservation found."));
+		Reservation reservation =
+			reservationRepository.findByMemberIdAndLockerIdAndReservationStatus(memberId, lockerId, ReservationStatus.VALID)
+				.orElseThrow(() -> new IllegalArgumentException("No Reservation found."));
+
 		reservation.changeStatus(ReservationStatus.EXPIRED);
 
 		Locker locker = lockerRepository.findById(lockerId)
