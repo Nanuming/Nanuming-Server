@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum SaveStatus {
+public enum ItemStatus {
 
 	TEMPORARY("temporary"),
-	SAVED("saved");
+	AVAILABLE("available"),
+	RESERVED("reserved"),
+	SHARED("shared");
 
 	private final String value;
 
