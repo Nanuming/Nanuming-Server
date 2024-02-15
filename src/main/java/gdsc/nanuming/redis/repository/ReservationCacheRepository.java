@@ -12,20 +12,21 @@ import gdsc.nanuming.redis.entity.ReservationCache;
 @Repository
 public class ReservationCacheRepository {
 
-	private final RedisTemplate<Long, Long> redisTemplate;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	private final Long reservationExpiration;
 
-	public ReservationCacheRepository(RedisTemplate<Long, Long> redisTemplate,
+	public ReservationCacheRepository(RedisTemplate<String, String> redisTemplate,
 		@Value("${redis.reservation.expiration}") Long reservationExpiration) {
 		this.redisTemplate = redisTemplate;
 		this.reservationExpiration = reservationExpiration;
 	}
 
 	public void save(final ReservationCache reservationCache) {
-		ValueOperations<Long, Long> valueOperations = redisTemplate.opsForValue();
-		valueOperations.set(reservationCache.getMemberId(), reservationCache.getLockerId());
-		redisTemplate.expire(reservationCache.getMemberId(), reservationExpiration, TimeUnit.MILLISECONDS);
+		String compositeKey = reservationCache.getMemberId() + ":" + reservationCache.getLockerId();
+		ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+		valueOperations.set(compositeKey, "reserved");
+		redisTemplate.expire(compositeKey, reservationExpiration, TimeUnit.SECONDS);
 	}
 
 }
