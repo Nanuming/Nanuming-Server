@@ -29,4 +29,14 @@ public class ReservationCacheRepository {
 		redisTemplate.expire(compositeKey, reservationExpiration, TimeUnit.SECONDS);
 	}
 
+	public boolean existsByMemberIdAndLockerId(Long memberId, Long lockerId) {
+		String compositeKey = memberId + ":" + lockerId;
+		return Boolean.TRUE.equals(redisTemplate.hasKey(compositeKey));
+	}
+
+	public void deleteByMemberIdAndLockerId(Long memberId, Long lockerId) {
+		String compositeKey = memberId + ":" + lockerId;
+		redisTemplate.delete(compositeKey);
+	}
+
 }
