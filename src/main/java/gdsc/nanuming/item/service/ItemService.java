@@ -16,8 +16,10 @@ import gdsc.nanuming.image.service.ImageService;
 import gdsc.nanuming.item.dto.ItemOutlineDto;
 import gdsc.nanuming.item.dto.request.AddItemRequest;
 import gdsc.nanuming.item.dto.request.AssignLockerRequest;
+import gdsc.nanuming.item.dto.request.ConfirmImageRequest;
 import gdsc.nanuming.item.dto.response.AddItemResponse;
 import gdsc.nanuming.item.dto.response.AssignLockerResponse;
+import gdsc.nanuming.item.dto.response.ConfirmImageResponse;
 import gdsc.nanuming.item.dto.response.ShowItemDetailResponse;
 import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.item.repository.ItemRepository;
@@ -107,6 +109,22 @@ public class ItemService {
 		item.assignLocker(locker);
 
 		return AssignLockerResponse.of(item.getId(), locker.getId());
+	}
+
+	@Transactional
+	public ConfirmImageResponse confirmImage(Long itemId, ConfirmImageRequest confirmImageRequest) {
+		Item temporarySavedItem = itemRepository.findById(itemId)
+			.orElseThrow(() -> new IllegalArgumentException("No Item found."));
+
+		log.info(">>> confirmImage: {}", confirmImageRequest.getConfirmImage());
+		ItemImage confirmItemImage = imageService
+			.uploadConfirmItemImage(confirmImageRequest.getConfirmImage(), temporarySavedItem);
+
+		temporarySavedItem.addConfirmItemImage(confirmItemImage);
+		temporarySavedItem.getItemImageList().add(confirmItemImage);
+		temporarySavedItem.changeSaveStatusToAvailable();
+
+		return ConfirmImageResponse.from(confirmItemImage.getItemImageId());
 	}
 
 	private List<String> convertIntoItemImageUrlList(List<ItemImage> itemImageList) {
