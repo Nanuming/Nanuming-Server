@@ -47,6 +47,10 @@ public class Item extends BaseEntity {
 	@JoinColumn(name = "main_image_id")
 	private ItemImage mainItemImage;
 
+	@OneToOne
+	@JoinColumn(name = "confirm_image_id")
+	private ItemImage confirmItemImage;
+
 	@OneToMany(mappedBy = "item")
 	private List<ItemImage> itemImageList = new ArrayList<>();
 
@@ -59,9 +63,7 @@ public class Item extends BaseEntity {
 	private String description;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	private SaveStatus saveStatus = SaveStatus.TEMPORARY;
-
-	private boolean shared = false;
+	private ItemStatus itemStatus = ItemStatus.TEMPORARY;
 
 	@Builder
 	private Item(Member sharer, Category category, String title, String description) {
@@ -84,6 +86,11 @@ public class Item extends BaseEntity {
 		this.mainItemImage = itemImage;
 	}
 
+	public void addConfirmItemImage(ItemImage itemImage) {
+		this.confirmItemImage = itemImage;
+		itemImage.addItem(this);
+	}
+
 	public void addItemImageList(List<ItemImage> itemImageList) {
 		itemImageList.forEach(itemImage -> {
 			this.itemImageList.add(itemImage.addItem(this));
@@ -93,4 +100,17 @@ public class Item extends BaseEntity {
 	public void assignLocker(Locker locker) {
 		this.locker = locker.storeItem(this);
 	}
+
+	public void changeSaveStatusToAvailable() {
+		this.itemStatus = ItemStatus.AVAILABLE;
+	}
+
+	public void changeSaveStatusToReserved() {
+		this.itemStatus = ItemStatus.RESERVED;
+	}
+
+	public void changeSaveStatusToShared() {
+		this.itemStatus = ItemStatus.SHARED;
+	}
+
 }
