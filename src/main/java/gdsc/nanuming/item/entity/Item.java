@@ -63,9 +63,7 @@ public class Item extends BaseEntity {
 	private String description;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	private SaveStatus saveStatus = SaveStatus.TEMPORARY;
-
-	private boolean shared = false;
+	private ItemStatus itemStatus = ItemStatus.TEMPORARY;
 
 	@Builder
 	private Item(Member sharer, Category category, String title, String description) {
@@ -100,5 +98,13 @@ public class Item extends BaseEntity {
 
 	public void assignLocker(Locker locker) {
 		this.locker = locker.storeItem(this);
+	}
+
+	public void changeSaveStatusToAvailable() {
+		this.itemStatus = ItemStatus.AVAILABLE;
+	}
+
+	public void changeSaveStatusToReserved() {
+		this.itemStatus = ItemStatus.RESERVED;
 	}
 }
