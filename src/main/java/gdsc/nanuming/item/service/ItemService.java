@@ -122,6 +122,7 @@ public class ItemService {
 
 		temporarySavedItem.addConfirmItemImage(confirmItemImage);
 		temporarySavedItem.getItemImageList().add(confirmItemImage);
+		temporarySavedItem.changeSaveStatusToAvailable();
 
 		return ConfirmImageResponse.from(confirmItemImage.getItemImageId());
 	}
