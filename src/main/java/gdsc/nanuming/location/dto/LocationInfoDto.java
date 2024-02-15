@@ -16,4 +16,12 @@ public class LocationInfoDto {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
+
+	public static LocationInfoDto of(Long locationId, double latitude, double longitude) {
+		return LocationInfoDto.builder()
+			.locationId(locationId)
+			.latitude(latitude)
+			.longitude(longitude)
+			.build();
+	}
 }
