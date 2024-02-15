@@ -59,4 +59,8 @@ public class Locker {
 		this.status = LockerStatus.OCCUPIED;
 		return this;
 	}
+
+	public void changeLockerStatusToEmpty() {
+		this.status = LockerStatus.EMPTY;
+	}
 }
