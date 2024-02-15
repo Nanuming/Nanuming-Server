@@ -31,8 +31,13 @@ public class ReservationService {
 	@Transactional
 	public void changeStatusToExpired(Long memberId, Long lockerId) {
 		Reservation reservation = reservationRepository.findByMemberIdAndLockerId(memberId, lockerId)
-			.orElseThrow(() -> new IllegalArgumentException("No reservation found."));
+			.orElseThrow(() -> new IllegalArgumentException("No Reservation found."));
 		reservation.changeStatus(ReservationStatus.EXPIRED);
+
+		Locker locker = lockerRepository.findById(lockerId)
+			.orElseThrow(() -> new IllegalArgumentException("No Locker found."));
+
+		locker.getItem().changeSaveStatusToAvailable();
 	}
 
 	@Transactional
@@ -49,6 +54,7 @@ public class ReservationService {
 
 		Reservation reservation = reservationRepository.save(Reservation.of(member, locker));
 		reservationCacheRepository.save(ReservationCache.of(member.getId(), locker.getId()));
+		locker.getItem().changeSaveStatusToReserved();
 
 		return ReservationResponse.of(reservation.getId(), member.getId(), locker.getId());
 	}
