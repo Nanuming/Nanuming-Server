@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.cloud.storage.BlobId;
@@ -34,6 +35,7 @@ public class ImageService {
 	private final static String SLASH = "/";
 	private final static String POINT = ".";
 
+	@Transactional
 	public List<ItemImage> uploadItemImage(List<MultipartFile> multipartFileList, Item temporarySavedItem) {
 
 		List<ItemImage> itemImageList = new ArrayList<>();
@@ -64,6 +66,7 @@ public class ImageService {
 		return itemImageList;
 	}
 
+	@Transactional
 	public ItemImage uploadConfirmItemImage(MultipartFile itemImage, Item temporarySavedItem) {
 		String uuid = UUID.randomUUID().toString();
 		String extension = itemImage.getContentType().replace(SLASH, POINT);
