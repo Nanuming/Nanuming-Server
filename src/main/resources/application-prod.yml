@@ -21,7 +21,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-
 redis:
   reservation:
-    expiration: 900
+    expiration: 30
