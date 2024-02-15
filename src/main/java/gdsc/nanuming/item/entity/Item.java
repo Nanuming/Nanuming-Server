@@ -107,4 +107,9 @@ public class Item extends BaseEntity {
 	public void changeSaveStatusToReserved() {
 		this.itemStatus = ItemStatus.RESERVED;
 	}
+
+	public void changeSaveStatusToShared() {
+		this.itemStatus = ItemStatus.SHARED;
+	}
+
 }
