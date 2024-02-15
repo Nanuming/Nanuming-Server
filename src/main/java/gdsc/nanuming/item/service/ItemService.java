@@ -78,7 +78,7 @@ public class ItemService {
 
 		List<String> itemImageUrlList = convertIntoItemImageUrlList(item.getItemImageList());
 		String category = item.getCategory().getCategoryName().getName();
-		String nickname = getCurrentUserDetails().getNickname();
+		String nickname = item.getSharer().getNickname();
 		Location location = item.getLocker().getLocation();
 		boolean isOwner = item.getSharer().getId().equals(getCurrentUserDetails().getId());
 		String createdAt = item.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
@@ -120,11 +120,11 @@ public class ItemService {
 		for (Locker locker : occupiedLockerList) {
 			Item item = locker.getItem();
 			itemOutlineDtoList.add(ItemOutlineDto.of(item.getId(),
-				item.getMainItemImage().getItemImageUrl(),
-				item.getTitle(),
-				location.getName(),
-				String.valueOf(item.getCategory().getCategoryName()
-				))
+					item.getMainItemImage().getItemImageUrl(),
+					item.getTitle(),
+					location.getName(),
+					String.valueOf(item.getCategory().getCategoryName().getName())
+				)
 			);
 		}
 		return itemOutlineDtoList;
