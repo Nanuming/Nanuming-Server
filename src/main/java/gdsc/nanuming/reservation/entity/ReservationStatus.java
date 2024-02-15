@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum ReservationStatus {
 
 	VALID("valid"),
+	SHARED("shared"),
 	EXPIRED("expired");
 
 	private final String status;
