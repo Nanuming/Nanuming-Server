@@ -47,6 +47,10 @@ public class Item extends BaseEntity {
 	@JoinColumn(name = "main_image_id")
 	private ItemImage mainItemImage;
 
+	@OneToOne
+	@JoinColumn(name = "confirm_image_id")
+	private ItemImage confirmItemImage;
+
 	@OneToMany(mappedBy = "item")
 	private List<ItemImage> itemImageList = new ArrayList<>();
 
@@ -82,6 +86,10 @@ public class Item extends BaseEntity {
 
 	public void addMainItemImage(ItemImage itemImage) {
 		this.mainItemImage = itemImage;
+	}
+
+	public void addConfirmItemImage(ItemImage itemImage) {
+		this.confirmItemImage = itemImage;
 	}
 
 	public void addItemImageList(List<ItemImage> itemImageList) {
