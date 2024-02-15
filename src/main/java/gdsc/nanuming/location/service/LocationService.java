@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gdsc.nanuming.item.dto.ItemOutlineDto;
+import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.item.service.ItemService;
-import gdsc.nanuming.location.dto.LocationWithItemOutlineListDto;
+import gdsc.nanuming.location.dto.LocationInfoDto;
 import gdsc.nanuming.location.dto.request.NearLocationAndItemRequest;
 import gdsc.nanuming.location.dto.response.NearLocationAndItemResponse;
 import gdsc.nanuming.location.entity.Location;
@@ -36,22 +37,28 @@ public class LocationService {
 		List<Location> locationList = locationRepository.findLocationList(polygon);
 		log.info("locationList.size(): {}", locationList.size());
 
-		List<LocationWithItemOutlineListDto> locationWithItemOutlineListDtoList = new ArrayList<>();
+		List<LocationInfoDto> locationInfoDtoList = locationList.stream()
+			.map(location -> LocationInfoDto.of(location.getId(), location.getLatitude(), location.getLongitude()))
+			.toList();
 
-		for (Location location : locationList) {
+		List<ItemOutlineDto> itemOutlineDtoList = new ArrayList<>();
 
-			List<Locker> occupiedLockerList = lockerService.occupiedLockerList(location.getId());
-			List<ItemOutlineDto> itemOutlineDtoList = itemService.convertIntoItemOutlineDtoList(occupiedLockerList,
-				location);
+		for (LocationInfoDto location : locationInfoDtoList) {
 
-			locationWithItemOutlineListDtoList.add(LocationWithItemOutlineListDto.of(
-				location.getId(),
-				location.getLatitude(),
-				location.getLongitude(),
-				itemOutlineDtoList));
+			List<Locker> occupiedLockerList = lockerService.occupiedLockerList(location.getLocationId());
+			for (Locker locker : occupiedLockerList) {
+				Item item = locker.getItem();
+				itemOutlineDtoList.add(ItemOutlineDto.of(
+					item.getId(),
+					item.getMainItemImage().getItemImageUrl(),
+					item.getTitle(),
+					locker.getLocation().getName(),
+					item.getCategory().getCategoryName().getName()
+				));
+			}
 		}
 
-		return NearLocationAndItemResponse.from(locationWithItemOutlineListDtoList);
+		return NearLocationAndItemResponse.of(locationInfoDtoList, itemOutlineDtoList);
 	}
 
 }
