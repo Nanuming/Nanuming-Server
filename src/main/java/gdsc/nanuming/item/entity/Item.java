@@ -88,6 +88,7 @@ public class Item extends BaseEntity {
 
 	public void addConfirmItemImage(ItemImage itemImage) {
 		this.confirmItemImage = itemImage;
+		itemImage.addItem(this);
 	}
 
 	public void addItemImageList(List<ItemImage> itemImageList) {
