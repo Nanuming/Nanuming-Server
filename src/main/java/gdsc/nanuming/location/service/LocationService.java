@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gdsc.nanuming.item.dto.ItemOutlineDto;
 import gdsc.nanuming.item.entity.Item;
+import gdsc.nanuming.item.entity.ItemStatus;
 import gdsc.nanuming.item.service.ItemService;
 import gdsc.nanuming.location.dto.LocationInfoDto;
 import gdsc.nanuming.location.dto.request.NearLocationAndItemRequest;
@@ -43,18 +44,19 @@ public class LocationService {
 
 		List<ItemOutlineDto> itemOutlineDtoList = new ArrayList<>();
 
-		for (LocationInfoDto location : locationInfoDtoList) {
-
-			List<Locker> occupiedLockerList = lockerService.occupiedLockerList(location.getLocationId());
+		for (LocationInfoDto locationInfoDto : locationInfoDtoList) {
+			List<Locker> occupiedLockerList = lockerService.occupiedLockerList(locationInfoDto.getLocationId());
 			for (Locker locker : occupiedLockerList) {
-				Item item = locker.getItem();
-				itemOutlineDtoList.add(ItemOutlineDto.of(
-					item.getId(),
-					item.getMainItemImage().getItemImageUrl(),
-					item.getTitle(),
-					locker.getLocation().getName(),
-					item.getCategory().getCategoryName().getName()
-				));
+				if (locker.getItem().getItemStatus().equals(ItemStatus.AVAILABLE)) {
+					Item item = locker.getItem();
+					itemOutlineDtoList.add(ItemOutlineDto.of(
+						item.getId(),
+						item.getMainItemImage().getItemImageUrl(),
+						item.getTitle(),
+						locker.getLocation().getName(),
+						item.getCategory().getCategoryName().getName()
+					));
+				}
 			}
 		}
 
