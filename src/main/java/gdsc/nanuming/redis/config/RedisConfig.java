@@ -7,7 +7,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
@@ -31,6 +32,15 @@ public class RedisConfig {
 		redisConfiguration.setPassword(password);
 
 		return new LettuceConnectionFactory(redisConfiguration);
+	}
+
+	@Bean
+	public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory) {
+
+		RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
+
+		redisMessageListenerContainer.setConnectionFactory(redisConnectionFactory);
+		return redisMessageListenerContainer;
 	}
 
 	@Bean
