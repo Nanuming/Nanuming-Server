@@ -91,7 +91,6 @@ public class Item extends BaseEntity {
 	}
 
 	public void assignLocker(Locker locker) {
-		this.saveStatus = SaveStatus.SAVED;
 		this.locker = locker.storeItem(this);
 	}
 }

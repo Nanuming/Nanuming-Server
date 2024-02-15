@@ -20,4 +20,8 @@ spring:
       max-request-size: 30MB
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
+
+redis:
+  reservation:
+    expiration: 900
