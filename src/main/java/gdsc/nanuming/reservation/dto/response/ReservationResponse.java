@@ -16,4 +16,12 @@ public class ReservationResponse {
 		this.memberId = memberId;
 		this.lockerId = lockerId;
 	}
+
+	public static ReservationResponse of(Long reservationId, Long memberId, Long lockerId) {
+		return ReservationResponse.builder()
+			.reservationId(reservationId)
+			.memberId(memberId)
+			.lockerId(lockerId)
+			.build();
+	}
 }
