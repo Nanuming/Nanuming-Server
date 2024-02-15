@@ -42,7 +42,7 @@ public class ImageService {
 				String uuid = UUID.randomUUID().toString();
 				String extension = itemImage.getContentType();
 				extension = extension.replace(SLASH, POINT);
-				String blobName = temporarySavedItem.getId() + "/" + uuid + extension;
+				String blobName = temporarySavedItem.getId() + SLASH + uuid + extension;
 
 				BlobId blobId = BlobId.of(bucketName, blobName);
 				BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
@@ -62,6 +62,27 @@ public class ImageService {
 			}
 		}
 		return itemImageList;
+	}
+
+	public ItemImage uploadConfirmItemImage(MultipartFile itemImage, Item temporarySavedItem) {
+		String uuid = UUID.randomUUID().toString();
+		String extension = itemImage.getContentType().replace(SLASH, POINT);
+		String blobName = temporarySavedItem.getId() + SLASH + uuid + extension;
+
+		BlobId blobId = BlobId.of(bucketName, blobName);
+		BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
+			.setContentType(extension)
+			.build();
+
+		try {
+			storage.create(blobInfo, itemImage.getBytes());
+		} catch (IOException e) {
+			throw new IllegalArgumentException("Storage creation error");
+		}
+
+		String uploadedImageUrl = GOOGLE_STORAGE + bucketName + SLASH + blobName;
+
+		return itemImageRepository.save(ItemImage.from(uploadedImageUrl));
 	}
 
 }
