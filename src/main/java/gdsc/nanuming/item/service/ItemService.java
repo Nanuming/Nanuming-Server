@@ -133,14 +133,14 @@ public class ItemService {
 			.toList();
 	}
 
-	public List<ItemOutlineDto> convertIntoItemOutlineDtoList(List<Locker> occupiedLockerList, Location location) {
+	public List<ItemOutlineDto> convertIntoItemOutlineDtoList(List<Locker> occupiedLockerList) {
 		List<ItemOutlineDto> itemOutlineDtoList = new ArrayList<>();
 		for (Locker locker : occupiedLockerList) {
 			Item item = locker.getItem();
 			itemOutlineDtoList.add(ItemOutlineDto.of(item.getId(),
 					item.getMainItemImage().getItemImageUrl(),
 					item.getTitle(),
-					location.getName(),
+					locker.getLocation().getName(),
 					String.valueOf(item.getCategory().getCategoryName().getName())
 				)
 			);
