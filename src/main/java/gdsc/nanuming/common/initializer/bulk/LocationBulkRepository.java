@@ -1,4 +1,4 @@
-package gdsc.nanuming.location.repository;
+package gdsc.nanuming.common.initializer.bulk;
 
 import java.util.ArrayList;
 import java.util.List;

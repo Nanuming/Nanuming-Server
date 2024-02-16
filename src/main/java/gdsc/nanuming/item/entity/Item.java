@@ -43,14 +43,6 @@ public class Item extends BaseEntity {
 	@JoinColumn(name = "locker_id")
 	private Locker locker;
 
-	@OneToOne
-	@JoinColumn(name = "main_image_id")
-	private ItemImage mainItemImage;
-
-	@OneToOne
-	@JoinColumn(name = "confirm_image_id")
-	private ItemImage confirmItemImage;
-
 	@OneToMany(mappedBy = "item")
 	private List<ItemImage> itemImageList = new ArrayList<>();
 
@@ -82,19 +74,17 @@ public class Item extends BaseEntity {
 			.build();
 	}
 
-	public void addMainItemImage(ItemImage itemImage) {
-		this.mainItemImage = itemImage;
-	}
-
-	public void addConfirmItemImage(ItemImage itemImage) {
-		this.confirmItemImage = itemImage;
-		itemImage.addItem(this);
-	}
-
 	public void addItemImageList(List<ItemImage> itemImageList) {
 		itemImageList.forEach(itemImage -> {
 			this.itemImageList.add(itemImage.addItem(this));
 		});
+	}
+
+	public ItemImage getMainItemImage() {
+		return this.itemImageList.stream()
+			.filter(ItemImage::isMain)
+			.findFirst()
+			.orElseThrow(() -> new IllegalArgumentException("No main image found."));
 	}
 
 	public void assignLocker(Locker locker) {
@@ -112,5 +102,4 @@ public class Item extends BaseEntity {
 	public void changeSaveStatusToShared() {
 		this.itemStatus = ItemStatus.SHARED;
 	}
-
 }
