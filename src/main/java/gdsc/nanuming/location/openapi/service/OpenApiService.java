@@ -19,10 +19,10 @@ import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 
+import gdsc.nanuming.common.initializer.bulk.LocationBulkRepository;
 import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.location.openapi.dto.LocationApiDto;
 import gdsc.nanuming.location.openapi.event.OpenApiLoadedEvent;
-import gdsc.nanuming.common.initializer.bulk.LocationBulkRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,6 +73,11 @@ public class OpenApiService {
 
 			// filter data that does not include latitude and longitude values
 			if (row.getAsString(LA).isEmpty() || row.getAsString(LO).isEmpty()) {
+				continue;
+			}
+
+			if (row.getAsString(LA).equals(SEOUL_CENTER_LATITUDE) && row.getAsString(LO)
+				.equals(SEOUL_CENTER_LONGITUDE)) {
 				continue;
 			}
 
