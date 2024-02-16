@@ -31,15 +31,31 @@ public class ItemImage extends BaseEntity {
 	@Column(name = "image_url")
 	private String itemImageUrl;
 
+	@Column(name = "is_main")
+	private boolean isMain;
+
+	@Column(name = "is_confirm")
+	private boolean isConfirm = false;
+
 	@Builder
-	private ItemImage(String itemImageUrl) {
+	private ItemImage(String itemImageUrl, boolean isMain) {
 		this.itemImageUrl = itemImageUrl;
+		this.isMain = isMain;
 	}
 
-	public static ItemImage from(String itemImageUrl) {
+	public static ItemImage from(String itemImageUrl, boolean isMain) {
 		return ItemImage.builder()
 			.itemImageUrl(itemImageUrl)
+			.isMain(isMain)
 			.build();
+	}
+
+	public void setAsMainImage() {
+		this.isMain = true;
+	}
+
+	public void setAsConfirmImage() {
+		this.isConfirm = true;
 	}
 
 	public ItemImage addItem(Item item) {
