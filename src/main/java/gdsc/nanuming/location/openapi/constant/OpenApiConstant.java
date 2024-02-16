@@ -7,6 +7,8 @@ public final class OpenApiConstant {
 	public static final String APPLICATION_JSON = "application/json";
 	public static final String CHILD_CARE_INFO = "ChildCareInfo";
 	public static final String LIST_TOTAL_COUNT = "list_total_count";
+	public static final String SEOUL_CENTER_LATITUDE = "37.566470";
+	public static final String SEOUL_CENTER_LONGITUDE = "126.977963";
 	public static final String ROW = "row";
 	public static final String SLASH = "/";
 	public static final String WHITE_SPACE = " ";

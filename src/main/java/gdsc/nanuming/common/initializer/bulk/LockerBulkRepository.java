@@ -1,4 +1,4 @@
-package gdsc.nanuming.locker.repository;
+package gdsc.nanuming.common.initializer.bulk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class LockerBulkRepository {
 	private static final int BIG_COUNT = 1;
 
 	public void bulkInsertLocker(long start, long end) {
-		log.info("{} ~ {} start", start, end);
+		log.info("bulkInsertLocker {} ~ {} start", start, end - 1);
 
 		final String sql = "INSERT INTO locker (location_id, size, status) VALUES (?, ?, ?)";
 
@@ -31,21 +31,26 @@ public class LockerBulkRepository {
 
 		for (long i = start; i <= end; i++) {
 			for (int j = 0; j < SMALL_COUNT; j++) {
-				batchArgs.add(
-					new Object[] {i, LockerSize.SMALL.toString(), LockerStatus.EMPTY.toString()});
+				if (j == 0) {
+					batchArgs.add(
+						new Object[] {i, "SMALL", "OCCUPIED"});
+				} else {
+					batchArgs.add(
+						new Object[] {i, "SMALL", "EMPTY"});
+				}
 			}
 			for (int j = 0; j < MIDDLE_COUNT; j++) {
 				batchArgs.add(
-					new Object[] {i, LockerSize.MIDDLE.toString(), LockerStatus.EMPTY.toString()});
+					new Object[] {i, "MIDDLE", "EMPTY"});
 			}
 			for (int j = 0; j < BIG_COUNT; j++) {
 				batchArgs.add(
-					new Object[] {i, LockerSize.BIG.toString(), LockerStatus.EMPTY.toString()});
+					new Object[] {i, "BIG", "EMPTY"});
 			}
 		}
 
 		template.batchUpdate(sql, batchArgs);
-		log.info("{} ~ {} finished", start, end);
+		log.info("bulkInsertLocker {} ~ {} finished", start, end - 1);
 	}
 
 }

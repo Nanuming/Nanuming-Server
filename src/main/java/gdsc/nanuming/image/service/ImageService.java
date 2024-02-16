@@ -34,13 +34,15 @@ public class ImageService {
 	private final static String GOOGLE_STORAGE = "https://storage.googleapis.com/";
 	private final static String SLASH = "/";
 	private final static String POINT = ".";
+	private final static String ITEM = "item";
 
 	@Transactional
 	public List<ItemImage> uploadItemImage(List<MultipartFile> multipartFileList, Item temporarySavedItem) {
 
 		List<ItemImage> itemImageList = new ArrayList<>();
-		for (MultipartFile itemImage : multipartFileList) {
+		for (int i = 0; i < multipartFileList.size(); i++) {
 			try {
+				MultipartFile itemImage = multipartFileList.get(i);
 				String uuid = UUID.randomUUID().toString();
 				String extension = itemImage.getContentType();
 				extension = extension.replace(SLASH, POINT);
@@ -53,10 +55,9 @@ public class ImageService {
 
 				storage.create(blobInfo, itemImage.getBytes());
 
-				String uploadedImageUrl = GOOGLE_STORAGE + bucketName + SLASH + blobName;
+				String uploadedImageUrl = GOOGLE_STORAGE + bucketName + SLASH + ITEM + SLASH + blobName;
 
-				ItemImage savedItemImage = itemImageRepository.save(ItemImage.from(uploadedImageUrl));
-
+				ItemImage savedItemImage = itemImageRepository.save(ItemImage.from(uploadedImageUrl, false));
 				itemImageList.add(savedItemImage);
 			} catch (IOException e) {
 				// TODO: need custom exception handler here
@@ -83,9 +84,9 @@ public class ImageService {
 			throw new IllegalArgumentException("Storage creation error");
 		}
 
-		String uploadedImageUrl = GOOGLE_STORAGE + bucketName + SLASH + blobName;
+		String uploadedImageUrl = GOOGLE_STORAGE + bucketName + SLASH + ITEM + SLASH + blobName;
 
-		return itemImageRepository.save(ItemImage.from(uploadedImageUrl));
+		return itemImageRepository.save(ItemImage.from(uploadedImageUrl, false));
 	}
 
 }
