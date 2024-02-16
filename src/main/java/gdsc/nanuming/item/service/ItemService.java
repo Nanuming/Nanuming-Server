@@ -46,7 +46,7 @@ public class ItemService {
 	private final ImageService imageService;
 
 	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-	private static final int THUMBNAIL_INDEX = 0;
+	private static final int MAIN_IMAGE_INDEX = 0;
 
 	@Transactional
 	public AddItemResponse addTemporaryItem(AddItemRequest addItemRequest) {
@@ -66,7 +66,7 @@ public class ItemService {
 		Item temporarySavedItem = itemRepository.save(newTemporaryItem);
 		List<ItemImage> itemImageList = imageService.uploadItemImage(addItemRequest.getImageList(), temporarySavedItem);
 		temporarySavedItem.addItemImageList(itemImageList);
-		temporarySavedItem.addMainItemImage(itemImageList.get(THUMBNAIL_INDEX));
+		itemImageList.get(MAIN_IMAGE_INDEX).setAsMainImage();
 
 		Item savedItem = itemRepository.save(newTemporaryItem);
 		return AddItemResponse.from(savedItem.getId());
@@ -120,7 +120,7 @@ public class ItemService {
 		ItemImage confirmItemImage = imageService
 			.uploadConfirmItemImage(confirmImageRequest.getConfirmImage(), temporarySavedItem);
 
-		temporarySavedItem.addConfirmItemImage(confirmItemImage);
+		confirmItemImage.setAsConfirmImage();
 		temporarySavedItem.getItemImageList().add(confirmItemImage);
 		temporarySavedItem.changeSaveStatusToAvailable();
 
