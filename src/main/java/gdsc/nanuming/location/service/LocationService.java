@@ -14,6 +14,7 @@ import gdsc.nanuming.item.service.ItemService;
 import gdsc.nanuming.location.dto.LocationInfoDto;
 import gdsc.nanuming.location.dto.request.NearLocationAndItemRequest;
 import gdsc.nanuming.location.dto.response.NearLocationAndItemResponse;
+import gdsc.nanuming.location.dto.response.SpecificLocationItemListResponse;
 import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.location.repository.LocationRepository;
 import gdsc.nanuming.location.util.GeometryUtil;
@@ -61,6 +62,12 @@ public class LocationService {
 		}
 
 		return NearLocationAndItemResponse.of(locationInfoDtoList, itemOutlineDtoList);
+	}
+
+	public SpecificLocationItemListResponse getSpecificLocationItemList(Long locationId) {
+		List<Locker> occupiedLockerList = lockerService.getOccupiedLockerList(locationId);
+		List<ItemOutlineDto> itemOutlineDtoList = itemService.convertIntoItemOutlineDtoList(occupiedLockerList);
+		return SpecificLocationItemListResponse.from(itemOutlineDtoList);
 	}
 
 }
