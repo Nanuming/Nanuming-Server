@@ -22,7 +22,7 @@ import net.minidev.json.parser.JSONParser;
 import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.location.openapi.dto.LocationApiDto;
 import gdsc.nanuming.location.openapi.event.OpenApiLoadedEvent;
-import gdsc.nanuming.location.repository.LocationBulkRepository;
+import gdsc.nanuming.common.initializer.bulk.LocationBulkRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,6 +52,7 @@ public class OpenApiService {
 
 				log.info("{} ~ {} start", i, endIndex);
 				saveData(jsonArray);
+				log.info("{} ~ {} finished", i, endIndex);
 			}
 			this.eventPublisher.publishEvent(new OpenApiLoadedEvent(this));
 		} catch (Exception e) {
@@ -60,7 +61,6 @@ public class OpenApiService {
 	}
 
 	private JSONArray fetchData(int startIndex, int endIndex) throws Exception {
-		log.info(">>> OpenApiService fetchData()");
 		String request = sendRequest(startIndex, endIndex);
 		JSONObject childCareInfoObject = getChildCareInfoObject(request);
 		return (JSONArray)childCareInfoObject.get(ROW);
@@ -85,7 +85,6 @@ public class OpenApiService {
 
 	private String sendRequest(int startIndex, int endIndex) throws Exception {
 		URL url = new URL(childCareInfoApiUrl + SLASH + startIndex + SLASH + endIndex);
-		log.info(">>> OpenApiService sendRequest() url: {}", url);
 		HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
 		httpURLConnection.setRequestMethod(GET);
 		httpURLConnection.setRequestProperty(CONTENT_TYPE, APPLICATION_JSON);
@@ -97,7 +96,6 @@ public class OpenApiService {
 	private int getTotalCount() throws Exception {
 		log.info(">>> OpenApiService getTotalCount()");
 		String initialRequest = sendRequest(START_INDEX, START_INDEX);
-		log.info(">>> OpenApiService getTotalCount() initialRequest: {}", initialRequest);
 		JSONObject childCareInfoObject = getChildCareInfoObject(initialRequest);
 		return Integer.parseInt(childCareInfoObject.getAsString(LIST_TOTAL_COUNT));
 	}
