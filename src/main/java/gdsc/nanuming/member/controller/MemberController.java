@@ -1,4 +1,4 @@
 package gdsc.nanuming.member.controller;
 
-public class MemberConotroller {
+public class MemberController {
 }
