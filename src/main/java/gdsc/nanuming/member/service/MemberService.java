@@ -149,6 +149,7 @@ public class MemberService {
 			temporarySavedItem.getCategory().getCategoryName().getName(),
 			NOT_ASSIGNED,
 			temporarySavedItem.getSharer().getNickname(),
+			temporarySavedItem.getTitle(),
 			temporarySavedItem.getDescription(),
 			true,
 			createdAt,
