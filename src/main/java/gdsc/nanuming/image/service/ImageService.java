@@ -46,7 +46,7 @@ public class ImageService {
 				String uuid = UUID.randomUUID().toString();
 				String extension = itemImage.getContentType();
 				extension = extension.replace(SLASH, POINT);
-				String blobName = temporarySavedItem.getId() + SLASH + uuid + extension;
+				String blobName = ITEM + SLASH + temporarySavedItem.getId() + SLASH + uuid + extension;
 
 				BlobId blobId = BlobId.of(bucketName, blobName);
 				BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
@@ -55,7 +55,7 @@ public class ImageService {
 
 				storage.create(blobInfo, itemImage.getBytes());
 
-				String uploadedImageUrl = GOOGLE_STORAGE + bucketName + SLASH + ITEM + SLASH + blobName;
+				String uploadedImageUrl = GOOGLE_STORAGE + bucketName + SLASH + blobName;
 
 				ItemImage savedItemImage = itemImageRepository.save(ItemImage.from(uploadedImageUrl, false));
 				itemImageList.add(savedItemImage);
