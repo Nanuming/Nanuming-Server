@@ -13,6 +13,7 @@ public class TemporaryItemDetailResponse {
 	private String category;
 	private String locationName;
 	private String nickname;
+	private String title;
 	private String description;
 	private boolean isOwner;
 	private String createdAt;
@@ -20,12 +21,14 @@ public class TemporaryItemDetailResponse {
 
 	@Builder
 	private TemporaryItemDetailResponse(Long itemId, List<String> itemImageUrlList, String category,
-		String locationName, String nickname, String description, boolean isOwner, String createdAt, String updatedAt) {
+		String locationName, String nickname, String title, String description, boolean isOwner, String createdAt,
+		String updatedAt) {
 		this.itemId = itemId;
 		this.itemImageUrlList = itemImageUrlList;
 		this.category = category;
 		this.locationName = locationName;
 		this.nickname = nickname;
+		this.title = title;
 		this.description = description;
 		this.isOwner = isOwner;
 		this.createdAt = createdAt;
@@ -33,13 +36,15 @@ public class TemporaryItemDetailResponse {
 	}
 
 	public static TemporaryItemDetailResponse of(Long itemId, List<String> itemImageUrlList, String category,
-		String locationName, String nickname, String description, boolean isOwner, String createdAt, String updatedAt) {
+		String locationName, String nickname, String title, String description, boolean isOwner, String createdAt,
+		String updatedAt) {
 		return TemporaryItemDetailResponse.builder()
 			.itemId(itemId)
 			.itemImageUrlList(itemImageUrlList)
 			.category(category)
 			.locationName(locationName)
 			.nickname(nickname)
+			.title(title)
 			.description(description)
 			.isOwner(isOwner)
 			.createdAt(createdAt)
