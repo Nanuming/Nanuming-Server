@@ -15,11 +15,7 @@ import gdsc.nanuming.image.entity.ItemImage;
 import gdsc.nanuming.image.service.ImageService;
 import gdsc.nanuming.item.dto.ItemOutlineDto;
 import gdsc.nanuming.item.dto.request.AddItemRequest;
-import gdsc.nanuming.item.dto.request.AssignLockerRequest;
-import gdsc.nanuming.item.dto.request.ConfirmImageRequest;
 import gdsc.nanuming.item.dto.response.AddItemResponse;
-import gdsc.nanuming.item.dto.response.AssignLockerResponse;
-import gdsc.nanuming.item.dto.response.ConfirmImageResponse;
 import gdsc.nanuming.item.dto.response.ShowItemDetailResponse;
 import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.item.repository.ItemRepository;
@@ -89,42 +85,6 @@ public class ItemService {
 		return ShowItemDetailResponse.of(itemId, itemImageUrlList, category,
 			nickname, location.getName(),
 			item.getDescription(), isOwner, createdAt, updatedAt);
-	}
-
-	@Transactional
-	public AssignLockerResponse assignLocker(Long itemId, AssignLockerRequest assignLockerRequest) {
-		log.info(">>> ItemService assignLocker()");
-
-		Item item = itemRepository.findById(itemId)
-			.orElseThrow(() -> new IllegalArgumentException("No item found."));
-
-		CustomUserDetails currentUserDetails = getCurrentUserDetails();
-		if (!item.getSharer().getId().equals(currentUserDetails.getId())) {
-			throw new IllegalStateException("Not permitted member.");
-		}
-
-		Locker locker = lockerRepository.findById(assignLockerRequest.getLockerId())
-			.orElseThrow(() -> new IllegalArgumentException("No locker found."));
-
-		item.assignLocker(locker);
-
-		return AssignLockerResponse.of(item.getId(), locker.getId());
-	}
-
-	@Transactional
-	public ConfirmImageResponse confirmImage(Long itemId, ConfirmImageRequest confirmImageRequest) {
-		Item temporarySavedItem = itemRepository.findById(itemId)
-			.orElseThrow(() -> new IllegalArgumentException("No Item found."));
-
-		log.info(">>> confirmImage: {}", confirmImageRequest.getConfirmImage());
-		ItemImage confirmItemImage = imageService
-			.uploadConfirmItemImage(confirmImageRequest.getConfirmImage(), temporarySavedItem);
-
-		confirmItemImage.setAsConfirmImage();
-		temporarySavedItem.getItemImageList().add(confirmItemImage);
-		temporarySavedItem.changeSaveStatusToAvailable();
-
-		return ConfirmImageResponse.from(confirmItemImage.getItemImageId());
 	}
 
 	private List<String> convertIntoItemImageUrlList(List<ItemImage> itemImageList) {
