@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import gdsc.nanuming.item.entity.ItemStatus;
 import gdsc.nanuming.locker.dto.request.OpenLockerRequest;
 import gdsc.nanuming.locker.dto.response.OpenLockerResponse;
 import gdsc.nanuming.locker.entity.Locker;
@@ -30,8 +31,8 @@ public class LockerService {
 	private final ReservationCacheRepository reservationCacheRepository;
 
 	public List<Locker> getOccupiedLockerList(Long locationId) {
-		return lockerRepository.findByLocationIdAndStatus(locationId,
-			LockerStatus.OCCUPIED);
+		return lockerRepository.findByLocationIdAndStatusAndItemItemStatus(locationId,
+			LockerStatus.OCCUPIED, ItemStatus.AVAILABLE);
 	}
 
 	@Transactional
