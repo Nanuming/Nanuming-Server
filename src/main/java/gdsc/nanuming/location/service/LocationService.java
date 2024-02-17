@@ -34,6 +34,8 @@ public class LocationService {
 
 	private final LocationRepository locationRepository;
 
+	private static final int LOCKER_COUNT = 6;
+
 	public NearLocationAndItemResponse getNearLocationAndItemList(NearLocationAndItemRequest request) {
 		Polygon polygon = GeometryUtil.createPolygon(request);
 		List<Location> locationList = locationRepository.findLocationList(polygon);
@@ -65,9 +67,17 @@ public class LocationService {
 	}
 
 	public SpecificLocationItemListResponse getSpecificLocationItemList(Long locationId) {
+		Location location = locationRepository.findById(locationId)
+			.orElseThrow(() -> new IllegalArgumentException("No Location found."));
+
 		List<Locker> occupiedLockerList = lockerService.getOccupiedLockerList(locationId);
+		int emptyLockerCount = LOCKER_COUNT - occupiedLockerList.size();
 		List<ItemOutlineDto> itemOutlineDtoList = itemService.convertIntoItemOutlineDtoList(occupiedLockerList);
-		return SpecificLocationItemListResponse.from(itemOutlineDtoList);
+		return SpecificLocationItemListResponse.of(
+			location.getName(),
+			emptyLockerCount,
+			occupiedLockerList.size(),
+			itemOutlineDtoList);
 	}
 
 }

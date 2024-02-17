@@ -1,4 +1,4 @@
-package gdsc.nanuming.item.dto.response;
+package gdsc.nanuming.member.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
