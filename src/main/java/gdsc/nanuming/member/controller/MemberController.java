@@ -16,6 +16,7 @@ import gdsc.nanuming.member.dto.request.ConfirmImageRequest;
 import gdsc.nanuming.member.dto.response.AssignLockerResponse;
 import gdsc.nanuming.member.dto.response.ConfirmImageResponse;
 import gdsc.nanuming.member.dto.response.ShowMemberItemList;
+import gdsc.nanuming.member.dto.response.TemporaryItemDetailResponse;
 import gdsc.nanuming.member.repository.MemberRepository;
 import gdsc.nanuming.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,14 @@ public class MemberController {
 		@RequestParam String itemStatus) {
 		log.info(">>> Run MemberController showItemListByItemStatus()");
 		return BaseResponseWithData.of(RESPONSE_SUCCESS, memberService.showItemListByItemStatus(memberId, itemStatus));
+	}
+
+	@GetMapping("/{memberId}/{itemId}")
+	public BaseResponseWithData<TemporaryItemDetailResponse> showTemporaryItemDetail(
+		@PathVariable Long memberId,
+		@PathVariable Long itemId) {
+		log.info(">>> Run MemberController showTemporaryItemDetail()");
+		return BaseResponseWithData.of(RESPONSE_SUCCESS, memberService.showTemporaryItemDetail(memberId, itemId));
 	}
 
 	@PostMapping("/{memberId}/{itemId}/assign")
