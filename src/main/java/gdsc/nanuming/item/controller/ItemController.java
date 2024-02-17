@@ -5,17 +5,12 @@ import static gdsc.nanuming.common.code.CommonCode.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gdsc.nanuming.common.response.BaseResponseWithData;
 import gdsc.nanuming.item.dto.request.AddItemRequest;
-import gdsc.nanuming.item.dto.request.AssignLockerRequest;
-import gdsc.nanuming.item.dto.request.ConfirmImageRequest;
 import gdsc.nanuming.item.dto.response.AddItemResponse;
-import gdsc.nanuming.item.dto.response.AssignLockerResponse;
-import gdsc.nanuming.item.dto.response.ConfirmImageResponse;
 import gdsc.nanuming.item.dto.response.ShowItemDetailResponse;
 import gdsc.nanuming.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -41,19 +36,4 @@ public class ItemController {
 		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.showItemDetail(itemId));
 	}
 
-	@PostMapping("/{itemId}/assign")
-	public BaseResponseWithData<AssignLockerResponse> assignLocker(
-		@PathVariable Long itemId,
-		@RequestBody AssignLockerRequest assignLockerRequest) {
-		log.info(">>> ItemController assignLocker()");
-		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.assignLocker(itemId, assignLockerRequest));
-	}
-
-	@PostMapping("/{itemId}/confirm")
-	public BaseResponseWithData<ConfirmImageResponse> confirmImage(
-		@PathVariable Long itemId,
-		ConfirmImageRequest confirmImageRequest) {
-		log.info(">>> ItemController confirmImage()");
-		return BaseResponseWithData.of(RESPONSE_SUCCESS, itemService.confirmImage(itemId, confirmImageRequest));
-	}
 }
