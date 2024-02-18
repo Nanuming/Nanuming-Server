@@ -16,11 +16,11 @@ spring:
       password: ${sm://REDIS_PASSWORD}
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 30MB
+      max-file-size: 6MB
+      max-request-size: 32MB
   jpa:
     hibernate:
       ddl-auto: create
 redis:
   reservation:
-    expiration: 30
+    expiration: 60
