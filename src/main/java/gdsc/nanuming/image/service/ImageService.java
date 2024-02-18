@@ -35,6 +35,7 @@ public class ImageService {
 	private final static String SLASH = "/";
 	private final static String POINT = ".";
 	private final static String ITEM = "item";
+	private final static String CONFIRM = "confirm";
 
 	@Transactional
 	public List<ItemImage> uploadItemImage(List<MultipartFile> multipartFileList, Item temporarySavedItem) {
@@ -71,7 +72,7 @@ public class ImageService {
 	public ItemImage uploadConfirmItemImage(MultipartFile itemImage, Item temporarySavedItem) {
 		String uuid = UUID.randomUUID().toString();
 		String extension = itemImage.getContentType().replace(SLASH, POINT);
-		String blobName = temporarySavedItem.getId() + SLASH + uuid + extension;
+		String blobName = CONFIRM + SLASH + temporarySavedItem.getId() + SLASH + uuid + extension;
 
 		BlobId blobId = BlobId.of(bucketName, blobName);
 		BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
