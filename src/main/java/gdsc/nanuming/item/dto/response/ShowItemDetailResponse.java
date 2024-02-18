@@ -9,6 +9,7 @@ import lombok.Getter;
 public class ShowItemDetailResponse {
 
 	private Long itemId;
+	private Long lockerId;
 	private List<String> itemImageUrlList;
 	private String category;
 	private String nickname;
@@ -19,9 +20,10 @@ public class ShowItemDetailResponse {
 	private String updatedAt;
 
 	@Builder
-	private ShowItemDetailResponse(Long itemId, List<String> itemImageUrlList, String category, String nickname,
+	private ShowItemDetailResponse(Long itemId, Long lockerId, List<String> itemImageUrlList, String category, String nickname,
 		String location, String description, boolean isOwner, String createdAt, String updatedAt) {
 		this.itemId = itemId;
+		this.lockerId = lockerId;
 		this.itemImageUrlList = itemImageUrlList;
 		this.category = category;
 		this.nickname = nickname;
@@ -32,10 +34,11 @@ public class ShowItemDetailResponse {
 		this.updatedAt = updatedAt;
 	}
 
-	public static ShowItemDetailResponse of(Long itemId, List<String> itemImageUrlList, String category,
+	public static ShowItemDetailResponse of(Long itemId, Long lockerId, List<String> itemImageUrlList, String category,
 		String nickname, String location, String description, boolean isOwner, String createdAt, String updatedAt) {
 		return ShowItemDetailResponse.builder()
 			.itemId(itemId)
+			.lockerId(lockerId)
 			.itemImageUrlList(itemImageUrlList)
 			.category(category)
 			.nickname(nickname)
@@ -46,4 +49,5 @@ public class ShowItemDetailResponse {
 			.updatedAt(updatedAt)
 			.build();
 	}
+
 }

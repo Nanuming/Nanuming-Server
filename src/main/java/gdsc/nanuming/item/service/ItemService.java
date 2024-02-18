@@ -75,6 +75,7 @@ public class ItemService {
 			.orElseThrow(() -> new IllegalArgumentException("No item found."));
 
 		List<String> itemImageUrlList = convertIntoItemImageUrlList(item.getItemImageList());
+		Long lockerId = item.getLocker().getId();
 		String category = item.getCategory().getCategoryName().getName();
 		String nickname = item.getSharer().getNickname();
 		Location location = item.getLocker().getLocation();
@@ -82,9 +83,8 @@ public class ItemService {
 		String createdAt = item.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
 		String updatedAt = item.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
 
-		return ShowItemDetailResponse.of(itemId, itemImageUrlList, category,
-			nickname, location.getName(),
-			item.getDescription(), isOwner, createdAt, updatedAt);
+		return ShowItemDetailResponse.of(itemId, lockerId, itemImageUrlList, category,
+			nickname, location.getName(), item.getDescription(), isOwner, createdAt, updatedAt);
 	}
 
 	private List<String> convertIntoItemImageUrlList(List<ItemImage> itemImageList) {
