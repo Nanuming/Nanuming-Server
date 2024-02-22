@@ -21,7 +21,6 @@ import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.item.repository.ItemRepository;
 import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.locker.entity.Locker;
-import gdsc.nanuming.locker.repository.LockerRepository;
 import gdsc.nanuming.member.entity.Member;
 import gdsc.nanuming.member.repository.MemberRepository;
 import gdsc.nanuming.security.util.CustomUserDetails;
@@ -36,7 +35,6 @@ public class ItemService {
 
 	private final ItemRepository itemRepository;
 	private final MemberRepository memberRepository;
-	private final LockerRepository lockerRepository;
 	private final CategoryRepository categoryRepository;
 
 	private final ImageService imageService;
