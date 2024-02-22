@@ -21,7 +21,6 @@ import gdsc.nanuming.item.entity.Item;
 import gdsc.nanuming.item.repository.ItemRepository;
 import gdsc.nanuming.location.entity.Location;
 import gdsc.nanuming.locker.entity.Locker;
-import gdsc.nanuming.locker.repository.LockerRepository;
 import gdsc.nanuming.member.entity.Member;
 import gdsc.nanuming.member.repository.MemberRepository;
 import gdsc.nanuming.security.util.CustomUserDetails;
@@ -36,7 +35,6 @@ public class ItemService {
 
 	private final ItemRepository itemRepository;
 	private final MemberRepository memberRepository;
-	private final LockerRepository lockerRepository;
 	private final CategoryRepository categoryRepository;
 
 	private final ImageService imageService;
@@ -76,6 +74,7 @@ public class ItemService {
 
 		List<String> itemImageUrlList = convertIntoItemImageUrlList(item.getItemImageList());
 		Long lockerId = item.getLocker().getId();
+		String title = item.getTitle();
 		String category = item.getCategory().getCategoryName().getName();
 		String nickname = item.getSharer().getNickname();
 		Location location = item.getLocker().getLocation();
@@ -83,7 +82,7 @@ public class ItemService {
 		String createdAt = item.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
 		String updatedAt = item.getCreatedAt().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
 
-		return ShowItemDetailResponse.of(itemId, lockerId, itemImageUrlList, category,
+		return ShowItemDetailResponse.of(itemId, lockerId, title, itemImageUrlList, category,
 			nickname, location.getName(), item.getDescription(), isOwner, createdAt, updatedAt);
 	}
 
