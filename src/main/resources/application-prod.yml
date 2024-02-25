@@ -23,4 +23,4 @@ spring:
       ddl-auto: validate
 redis:
   reservation:
-    expiration: 60
+    expiration: 900
