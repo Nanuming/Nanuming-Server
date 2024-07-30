@@ -1,0 +1,4 @@
+aws:
+  secretsmanager:
+    name: ${SECRETS_MANAGER_NAME}
+    region: ${AWS_REGION}
