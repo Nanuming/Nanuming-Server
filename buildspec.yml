@@ -14,7 +14,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Compiling the Gradle project...
-      - ./gradlew clean build -Dspring.profiles.active=cloud
+      - ./gradlew clean build -PspringProfile=cloud
       - echo Building the Docker image...
       - docker build -t $IMAGE_REPOSITORY_URI:latest .
       - docker tag $IMAGE_REPOSITORY_URI:latest $IMAGE_REPOSITORY_URI:$IMAGE_TAG
