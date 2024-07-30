@@ -2,8 +2,6 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      docker: 19
     commands:
       - echo Installing Java 21...
       - yum remove -y java
