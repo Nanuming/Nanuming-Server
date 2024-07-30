@@ -1,19 +1,16 @@
 spring:
-  config:
-    import:
-      "sm://"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${sm://TEST_DB_HOST}
-    username: ${sm://TEST_DB_USER}
-    password: ${sm://TEST_DB_PASSWORD}
+    url: ${TEST_DB_URL}
+    username: ${TEST_DB_USER}
+    password: ${TEST_DB_PASSWORD}
   data:
     redis:
       repositories:
         enabled: false
-      host: ${sm://REDIS_HOST}
-      port: ${sm://REDIS_PORT}
-      password: ${sm://REDIS_PASSWORD}
+      host: ${TEST_REDIS_HOST}
+      port: ${TEST_REDIS_PORT}
+      password: ${TEST_REDIS_PASSWORD}
   jpa:
     show-sql: true
     hibernate:
