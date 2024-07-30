@@ -3,18 +3,13 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo Starting MySQL Docker container...
+      - docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=${TEST_ROOT} -e MYSQL_DATABASE=test -e MYSQL_USER=${TEST_DB_USER} -e MYSQL_PASSWORD=${TEST_DB_PASSWORD} -p 3306:3306 -d mysql:5.7
+      - echo Waiting for MySQL to start...
+      - sleep 30
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${DEFAULT_IMAGE_REPOSITORY_URI}
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - echo "Environment variables:"
-      - echo "TEST_DB_URL=$TEST_DB_URL"
-      - echo "TEST_DB_USER=$TEST_DB_USER"
-      - echo "TEST_DB_PASSWORD=$TEST_DB_PASSWORD"
-      - echo "TEST_REDIS_HOST=$TEST_REDIS_HOST"
-      - echo "TEST_REDIS_PORT=$TEST_REDIS_PORT"
-      - echo "TEST_REDIS_PASSWORD=$TEST_REDIS_PASSWORD"
-      - echo "Testing DB connection..."
-      - nc -zv $(echo $TEST_DB_URL | sed -e 's/jdbc:mysql:\/\///' -e 's/\/.*//') 3306
   build:
     commands:
       - echo Build started on `date`
@@ -26,6 +21,10 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
+      - echo Stopping MySQL Docker container...
+      - docker stop mysql-container
+      - echo Removing MySQL Docker container...
+      - docker rm mysql-container
       - echo Pushing the Docker images...
       - docker push $IMAGE_REPOSITORY_URI:latest
       - docker push $IMAGE_REPOSITORY_URI:$IMAGE_TAG
