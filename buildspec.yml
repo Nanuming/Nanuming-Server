@@ -6,6 +6,15 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${DEFAULT_IMAGE_REPOSITORY_URI}
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - echo "Environment variables:"
+      - echo "TEST_DB_URL=$TEST_DB_URL"
+      - echo "TEST_DB_USER=$TEST_DB_USER"
+      - echo "TEST_DB_PASSWORD=$TEST_DB_PASSWORD"
+      - echo "TEST_REDIS_HOST=$TEST_REDIS_HOST"
+      - echo "TEST_REDIS_PORT=$TEST_REDIS_PORT"
+      - echo "TEST_REDIS_PASSWORD=$TEST_REDIS_PASSWORD"
+      - echo "Testing DB connection..."
+      - nc -zv $(echo $TEST_DB_URL | sed -e 's/jdbc:mysql:\/\///' -e 's/\/.*//') 3306
   build:
     commands:
       - echo Build started on `date`
