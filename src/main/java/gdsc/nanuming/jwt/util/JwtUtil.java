@@ -37,8 +37,8 @@ public class JwtUtil {
 
 	private SecretKey secretKey;
 
-	public JwtUtil(@Value("${sm://JWT_ACCESS_TOKEN_PERIOD}") String accessTokenPeriod,
-		@Value("${sm://JWT_REFRESH_TOKEN_PERIOD}") String refreshTokenPeriod) {
+	public JwtUtil(@Value("${JWT_ACCESS_TOKEN_PERIOD}") String accessTokenPeriod,
+		@Value("${JWT_REFRESH_TOKEN_PERIOD}") String refreshTokenPeriod) {
 		this.accessTokenPeriod = Long.parseLong(accessTokenPeriod);
 		this.refreshTokenPeriod = Long.parseLong(refreshTokenPeriod);
 	}

@@ -34,7 +34,7 @@ public class OpenApiService {
 	private final LocationBulkRepository locationBulkRepository;
 	private final ApplicationEventPublisher eventPublisher;
 
-	@Value("${sm://CHILD_CARE_INFO_API_URL}")
+	@Value("${CHILD_CARE_INFO_API_URL}")
 	private String childCareInfoApiUrl;
 
 	@Transactional
