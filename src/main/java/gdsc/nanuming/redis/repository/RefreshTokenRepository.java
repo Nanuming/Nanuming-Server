@@ -19,7 +19,7 @@ public class RefreshTokenRepository {
 	private final Long refreshTokenPeriod;
 
 	public RefreshTokenRepository(RedisTemplate<String, String> redisTemplate,
-		@Value("${sm://JWT_REFRESH_TOKEN_PERIOD}") String refreshTokenPeriod) {
+		@Value("${JWT_REFRESH_TOKEN_PERIOD}") String refreshTokenPeriod) {
 		this.redisTemplate = redisTemplate;
 		this.refreshTokenPeriod = Long.parseLong(refreshTokenPeriod);
 	}
