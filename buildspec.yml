@@ -5,19 +5,19 @@ phases:
     commands:
       - echo Starting MySQL Docker container...
       - docker run --name mysql-container \
-          -e MYSQL_ROOT_PASSWORD=${TEST_DB_ROOT_PASSWORD} \
-          -e MYSQL_DATABASE=${TEST_DB_NAME} \
-          -p 3306:3306 \
-          -d mysql:5.7 \
-          mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+        -e MYSQL_ROOT_PASSWORD=${TEST_DB_ROOT_PASSWORD} \
+        -e MYSQL_DATABASE=${TEST_DB_NAME} \
+        -p 3306:3306
+        -d mysql:5.7 \
+        --character-set-server=utf8 --collation-server=utf8_unicode_ci
       - echo Waiting for MySQL to start...
       - sleep 30
       - echo Checking MySQL status...
       - until docker exec mysql-container mysqladmin ping \
-          --host=127.0.0.1 \
-          --user=root \
-          --password=${TEST_DB_ROOT_PASSWORD} \
-          --silent; do \
+        --host=127.0.0.1 \
+        --user=root \
+        --password=${TEST_DB_ROOT_PASSWORD} \
+        --silent; do \
             echo waiting for mysql; \
             sleep 3;
           done
