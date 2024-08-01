@@ -66,4 +66,33 @@ public class S3ImageService {
 		return itemImageList;
 	}
 
+	@Transactional
+	public ItemImage uploadConfirmItemImage(MultipartFile itemImage, Item temporarySavedItem) {
+		try {
+			String uuid = UUID.randomUUID().toString();
+			String extension = extractExtension(itemImage.getContentType());
+			String objectKey = CONFIRM + SLASH + temporarySavedItem.getId() + SLASH + uuid + extension;
+
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentType(itemImage.getContentType());
+			metadata.setContentLength(itemImage.getSize());
+
+			amazonS3.putObject(new PutObjectRequest(bucketName, objectKey, itemImage.getInputStream(), metadata)
+				.withCannedAcl(CannedAccessControlList.PublicRead));
+
+			String uploadedImageUrl = S3_URL + bucketName + SLASH + objectKey;
+
+			return itemImageRepository.save(ItemImage.from(uploadedImageUrl, false));
+		} catch (IOException e) {
+			throw new IllegalArgumentException("Storage creation error", e);
+		}
+	}
+
+	private String extractExtension(String contentType) {
+		String extension = "";
+		if (contentType != null && contentType.contains(SLASH)) {
+			extension = POINT + contentType.split(SLASH)[1];
+		}
+		return extension;
+	}
 }
