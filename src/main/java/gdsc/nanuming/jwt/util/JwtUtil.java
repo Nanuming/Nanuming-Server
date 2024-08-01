@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
