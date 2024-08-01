@@ -11,9 +11,9 @@ phases:
       - echo MySQL is up and running
 
       - echo Starting Redis Docker container...
-      - docker run -d --name redis-container -p 6379:6379 redis:latest
+      - docker run -d --name redis-container -p 6379:6379 -e REDIS_PASSWORD=${TEST_REDIS_PASSWORD} redis:latest redis-server --requirepass ${TEST_REDIS_PASSWORD}
       - echo Waiting for Redis to start...
-      - until docker exec redis-container redis-cli ping | grep PONG; do echo waiting for redis; sleep 3; done
+      - until docker exec redis-container redis-cli -a ${TEST_REDIS_PASSWORD} ping | grep PONG; do echo waiting for redis; sleep 3; done
       - echo Redis is up and running
 
       - echo Logging in to Amazon ECR...
