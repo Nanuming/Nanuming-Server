@@ -13,4 +13,10 @@ public class AwsS3Config {
 	@Value("${AWS_REGION}")
 	private String awsRegion;
 
+	@Bean
+	public AmazonS3 amazonS3() {
+		return AmazonS3ClientBuilder.standard()
+			.withRegion(awsRegion)
+			.build();
+	}
 }
