@@ -1,4 +1,41 @@
 package gdsc.nanuming.image.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+
+import gdsc.nanuming.image.entity.ItemImage;
+import gdsc.nanuming.image.repository.ItemImageRepository;
+import gdsc.nanuming.item.entity.Item;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
 public class S3ImageService {
+
+	@Value("${AWS_S3_BUCKET_NAME}")
+	private String bucketName;
+
+	private final AmazonS3 amazonS3;
+	private final ItemImageRepository itemImageRepository;
+
+	private final static String S3_URL = "https://s3.amazonaws.com/";
+	private final static String SLASH = "/";
+	private final static String POINT = ".";
+	private final static String ITEM = "item";
+	private final static String CONFIRM = "confirm";
+
 }
