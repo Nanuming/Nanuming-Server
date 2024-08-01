@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import gdsc.nanuming.image.entity.ItemImage;
 import gdsc.nanuming.image.repository.ItemImageRepository;
@@ -25,13 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ImageService {
 
-	@Value("${sm://BUCKET_NAME}")
+	@Value("${AWS_S3_BUCKET_NAME}")
 	private String bucketName;
 
-	private final Storage storage;
+	private final AmazonS3 amazonS3;
 	private final ItemImageRepository itemImageRepository;
 
-	private final static String GOOGLE_STORAGE = "https://storage.googleapis.com/";
+	private final static String S3_URL = "https://s3.amazonaws.com/";
 	private final static String SLASH = "/";
 	private final static String POINT = ".";
 	private final static String ITEM = "item";
@@ -41,28 +42,25 @@ public class ImageService {
 	public List<ItemImage> uploadItemImage(List<MultipartFile> multipartFileList, Item temporarySavedItem) {
 
 		List<ItemImage> itemImageList = new ArrayList<>();
-		for (int i = 0; i < multipartFileList.size(); i++) {
+		for (MultipartFile itemImage : multipartFileList) {
 			try {
-				MultipartFile itemImage = multipartFileList.get(i);
 				String uuid = UUID.randomUUID().toString();
-				String extension = itemImage.getContentType();
-				extension = extension.replace(SLASH, POINT);
-				String blobName = ITEM + SLASH + temporarySavedItem.getId() + SLASH + uuid + extension;
+				String extension = extractExtension(itemImage.getContentType());
+				String objectKey = ITEM + SLASH + temporarySavedItem.getId() + SLASH + uuid + extension;
 
-				BlobId blobId = BlobId.of(bucketName, blobName);
-				BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
-					.setContentType(extension)
-					.build();
+				ObjectMetadata metadata = new ObjectMetadata();
+				metadata.setContentType(itemImage.getContentType());
+				metadata.setContentLength(itemImage.getSize());
 
-				storage.create(blobInfo, itemImage.getBytes());
+				amazonS3.putObject(new PutObjectRequest(bucketName, objectKey, itemImage.getInputStream(), metadata)
+					.withCannedAcl(CannedAccessControlList.PublicRead));
 
-				String uploadedImageUrl = GOOGLE_STORAGE + bucketName + SLASH + blobName;
+				String uploadedImageUrl = S3_URL + bucketName + SLASH + objectKey;
 
 				ItemImage savedItemImage = itemImageRepository.save(ItemImage.from(uploadedImageUrl, false));
 				itemImageList.add(savedItemImage);
 			} catch (IOException e) {
-				// TODO: need custom exception handler here
-				throw new RuntimeException("File upload Failure");
+				throw new RuntimeException("File upload Failure", e);
 			}
 		}
 		return itemImageList;
@@ -70,24 +68,31 @@ public class ImageService {
 
 	@Transactional
 	public ItemImage uploadConfirmItemImage(MultipartFile itemImage, Item temporarySavedItem) {
-		String uuid = UUID.randomUUID().toString();
-		String extension = itemImage.getContentType().replace(SLASH, POINT);
-		String blobName = CONFIRM + SLASH + temporarySavedItem.getId() + SLASH + uuid + extension;
-
-		BlobId blobId = BlobId.of(bucketName, blobName);
-		BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
-			.setContentType(extension)
-			.build();
-
 		try {
-			storage.create(blobInfo, itemImage.getBytes());
+			String uuid = UUID.randomUUID().toString();
+			String extension = extractExtension(itemImage.getContentType());
+			String objectKey = CONFIRM + SLASH + temporarySavedItem.getId() + SLASH + uuid + extension;
+
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentType(itemImage.getContentType());
+			metadata.setContentLength(itemImage.getSize());
+
+			amazonS3.putObject(new PutObjectRequest(bucketName, objectKey, itemImage.getInputStream(), metadata)
+				.withCannedAcl(CannedAccessControlList.PublicRead));
+
+			String uploadedImageUrl = S3_URL + bucketName + SLASH + objectKey;
+
+			return itemImageRepository.save(ItemImage.from(uploadedImageUrl, false));
 		} catch (IOException e) {
-			throw new IllegalArgumentException("Storage creation error");
+			throw new IllegalArgumentException("Storage creation error", e);
 		}
-
-		String uploadedImageUrl = GOOGLE_STORAGE + bucketName + SLASH + ITEM + SLASH + blobName;
-
-		return itemImageRepository.save(ItemImage.from(uploadedImageUrl, false));
 	}
 
+	private String extractExtension(String contentType) {
+		String extension = "";
+		if (contentType != null && contentType.contains(SLASH)) {
+			extension = POINT + contentType.split(SLASH)[1];
+		}
+		return extension;
+	}
 }
