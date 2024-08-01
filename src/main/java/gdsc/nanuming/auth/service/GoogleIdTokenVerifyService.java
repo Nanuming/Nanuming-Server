@@ -19,7 +19,7 @@ public class GoogleIdTokenVerifyService {
 	private final GoogleIdTokenVerifier verifier;
 
 	public GoogleIdTokenVerifyService(HttpTransport transport, GsonFactory gsonFactory,
-		@Value("${sm://IOS_CLIENT_ID}") String clientId) {
+		@Value("${IOS_CLIENT_ID}") String clientId) {
 		this.verifier = new GoogleIdTokenVerifier.Builder(transport, gsonFactory)
 			.setAudience(Collections.singletonList(clientId))
 			.build();
