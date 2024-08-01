@@ -88,3 +88,7 @@ tasks.named('asciidoctor') {
     inputs.dir snippetsDir
     dependsOn test
 }
+
+configurations.all {
+    exclude group: 'commons-logging', module: 'commons-logging'
+}
