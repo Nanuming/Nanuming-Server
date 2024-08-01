@@ -38,4 +38,32 @@ public class S3ImageService {
 	private final static String ITEM = "item";
 	private final static String CONFIRM = "confirm";
 
+	@Transactional
+	public List<ItemImage> uploadItemImage(List<MultipartFile> multipartFileList, Item temporarySavedItem) {
+
+		List<ItemImage> itemImageList = new ArrayList<>();
+		for (MultipartFile itemImage : multipartFileList) {
+			try {
+				String uuid = UUID.randomUUID().toString();
+				String extension = extractExtension(itemImage.getContentType());
+				String objectKey = ITEM + SLASH + temporarySavedItem.getId() + SLASH + uuid + extension;
+
+				ObjectMetadata metadata = new ObjectMetadata();
+				metadata.setContentType(itemImage.getContentType());
+				metadata.setContentLength(itemImage.getSize());
+
+				amazonS3.putObject(new PutObjectRequest(bucketName, objectKey, itemImage.getInputStream(), metadata)
+					.withCannedAcl(CannedAccessControlList.PublicRead));
+
+				String uploadedImageUrl = S3_URL + bucketName + SLASH + objectKey;
+
+				ItemImage savedItemImage = itemImageRepository.save(ItemImage.from(uploadedImageUrl, false));
+				itemImageList.add(savedItemImage);
+			} catch (IOException e) {
+				throw new RuntimeException("File upload Failure", e);
+			}
+		}
+		return itemImageList;
+	}
+
 }
