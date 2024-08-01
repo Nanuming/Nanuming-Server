@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,15 @@ import lombok.extern.slf4j.Slf4j;
 public class ItemImageBulkRepository {
 
 	private final JdbcTemplate template;
+
+	@Value("${S3_BASE_URL}")
+	private String s3BaseUrl;
+
+	@Value("${MAIN_IMAGE_PATH}")
+	private String mainImagePath;
+
+	@Value("${CONFIRM_IMAGE_PATH}")
+	private String confirmImagePath;
 
 	public void bulkInsertItemImage(long start, long end) {
 		log.info("bulkInsertItemImage {} ~ {} start", start, end - 1);
@@ -36,9 +46,9 @@ public class ItemImageBulkRepository {
 
 		for (long i = start; i < end; i++) {
 			Object[] mainImageArgs = {false, true, currentTime, i, currentTime,
-				"https://storage.googleapis.com/nanuming-image-bucket/dummy/6.jpeg"};
+				s3BaseUrl + mainImagePath};
 			Object[] confirmImageArgs = {true, false, currentTime, i, currentTime,
-				"https://storage.googleapis.com/nanuming-image-bucket/dummy/1.png"};
+				s3BaseUrl + confirmImagePath};
 
 			batchArgs.add(mainImageArgs);
 			batchArgs.add(confirmImageArgs);
