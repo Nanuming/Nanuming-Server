@@ -38,3 +38,6 @@ out/
 
 ### application.yml ###
 src/main/resources/application-local.yml
+
+### AwsConfig.java (for local build) ###
+src/main/java/gdsc/nanuming/common/config/AwsConfig.java
