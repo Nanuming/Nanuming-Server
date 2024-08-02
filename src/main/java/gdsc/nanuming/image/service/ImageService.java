@@ -10,14 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-
 import gdsc.nanuming.image.entity.ItemImage;
 import gdsc.nanuming.image.repository.ItemImageRepository;
 import gdsc.nanuming.item.entity.Item;
+import io.awspring.cloud.s3.S3Template;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +25,7 @@ public class ImageService {
 	@Value("${AWS_S3_BUCKET_NAME}")
 	private String bucketName;
 
-	private final AmazonS3 amazonS3;
+	private final S3Template s3Template;
 	private final ItemImageRepository itemImageRepository;
 
 	private final static String S3_URL = "https://s3.amazonaws.com/";
@@ -48,12 +44,7 @@ public class ImageService {
 				String extension = extractExtension(itemImage.getContentType());
 				String objectKey = ITEM + SLASH + temporarySavedItem.getId() + SLASH + uuid + extension;
 
-				ObjectMetadata metadata = new ObjectMetadata();
-				metadata.setContentType(itemImage.getContentType());
-				metadata.setContentLength(itemImage.getSize());
-
-				amazonS3.putObject(new PutObjectRequest(bucketName, objectKey, itemImage.getInputStream(), metadata)
-					.withCannedAcl(CannedAccessControlList.PublicRead));
+				s3Template.upload(bucketName, objectKey, itemImage.getInputStream());
 
 				String uploadedImageUrl = S3_URL + bucketName + SLASH + objectKey;
 
@@ -73,12 +64,7 @@ public class ImageService {
 			String extension = extractExtension(itemImage.getContentType());
 			String objectKey = CONFIRM + SLASH + temporarySavedItem.getId() + SLASH + uuid + extension;
 
-			ObjectMetadata metadata = new ObjectMetadata();
-			metadata.setContentType(itemImage.getContentType());
-			metadata.setContentLength(itemImage.getSize());
-
-			amazonS3.putObject(new PutObjectRequest(bucketName, objectKey, itemImage.getInputStream(), metadata)
-				.withCannedAcl(CannedAccessControlList.PublicRead));
+			s3Template.upload(bucketName, objectKey, itemImage.getInputStream());
 
 			String uploadedImageUrl = S3_URL + bucketName + SLASH + objectKey;
 
