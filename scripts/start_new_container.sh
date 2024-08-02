@@ -13,7 +13,7 @@ IOS_CLIENT_ID=$(aws ssm get-parameter --name "/nanuming/IOS_CLIENT_ID" --with-de
 
 
 
-aws ecr get-login-password --region "$AWS_REGION" | docker login --username aws --password-stdin "$DEFAULT_IMAGE_REPOSITORY_URI"
+aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$DEFAULT_IMAGE_REPOSITORY_URI"
 
 docker pull "$IMAGE_REPOSITORY_URI":latest
 
