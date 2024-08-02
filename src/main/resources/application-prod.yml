@@ -1,4 +1,14 @@
 spring:
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      parameterstore:
+        enabled: true
+      s3:
+        bucket: {$AWS_S3_BUCKET_NAME}
+  config:
+    import: aws-parameterstore:/nanuming/
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}
