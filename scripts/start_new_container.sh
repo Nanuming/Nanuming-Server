@@ -10,6 +10,9 @@ S3_BASE_URL=$(aws ssm get-parameter --name "/nanuming/S3_BASE_URL" --with-decryp
 MAIN_IMAGE_PATH=$(aws ssm get-parameter --name "/nanuming/MAIN_IMAGE_PATH" --with-decryption --query "Parameter.Value" --output text)
 CONFIRM_IMAGE_PATH=$(aws ssm get-parameter --name "/nanuming/CONFIRM_IMAGE_PATH" --with-decryption --query "Parameter.Value" --output text)
 IOS_CLIENT_ID=$(aws ssm get-parameter --name "/nanuming/IOS_CLIENT_ID" --with-decryption --query "Parameter.Value" --output text)
+JWT_ACCESS_TOKEN_PERIOD=$(aws ssm get-parameter --name "/nanuming/JWT_ACCESS_TOKEN_PERIOD" --with-decryption --query "Parameter.Value" --output text)
+JWT_REFRESH_TOKEN_PERIOD=$(aws ssm get-parameter --name "/nanuming/JWT_REFRESH_TOKEN_PERIOD" --with-decryption --query "Parameter.Value" --output text)
+
 
 
 
@@ -26,4 +29,6 @@ docker run -d --name nanuming-server \
   -e MAIN_IMAGE_PATH="$MAIN_IMAGE_PATH" \
   -e CONFIRM_IMAGE_PATH="$CONFIRM_IMAGE_PATH" \
   -e IOS_CLIENT_ID="$IOS_CLIENT_ID" \
+  -e JWT_ACCESS_TOKEN_PERIOD="$JWT_ACCESS_TOKEN_PERIOD" \
+  -e JWT_REFRESH_TOKEN_PERIOD="$JWT_REFRESH_TOKEN_PERIOD" \
   "$IMAGE_REPOSITORY_URI":latest
