@@ -10,4 +10,5 @@ docker pull "$IMAGE_REPOSITORY_URI":latest
 
 docker run -d --name nanuming-server \
   -e SPRING_PROFILES_ACTIVE=prod \
+  -p 8080:8080 \
   "$IMAGE_REPOSITORY_URI":latest
